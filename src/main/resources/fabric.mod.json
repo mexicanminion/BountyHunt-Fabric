@@ -1,37 +1,37 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "bountyhunt",
 	"version": "${version}",
-	"name": "Example mod",
+	"name": "Bounty Hunt",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"Me!"
+		"MexicanMinion"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"icon": "assets/bountyhunt/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"net.mexicanminion.bountyhunt.BountyHuntMod"
 		],
 		"client": [
 			"com.example.ExampleModClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+		"bountyhunt.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "bountyhunt.client.mixins.json",
 			"environment": "client"
 		}
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",
-		"minecraft": "~1.20.4",
+		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*"
 	},
