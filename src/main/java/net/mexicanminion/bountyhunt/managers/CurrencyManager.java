@@ -11,7 +11,6 @@ public class CurrencyManager {
 
     public static HashMap<UUID, Integer> currencyMap = new HashMap<UUID, Integer>();
 
-
     public void saveCurrencyFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "currency.dat");
@@ -54,6 +53,9 @@ public class CurrencyManager {
     }
 
     public static int getCurrency(UUID uuid) {
+        if(currencyMap.get(uuid) == null) {
+            return -1;
+        }
         return currencyMap.get(uuid);
     }
 }

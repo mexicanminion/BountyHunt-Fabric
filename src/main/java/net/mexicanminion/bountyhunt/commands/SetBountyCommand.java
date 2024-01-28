@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.mexicanminion.bountyhunt.gui.SetBountyGUI;
+import net.mexicanminion.bountyhunt.managers.CurrencyManager;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,10 +26,9 @@ public class SetBountyCommand {
                                 .executes(context -> setBounty(context, EntityArgumentType.getPlayer(context, "player"), context.getSource()))));
     }
 
-    public static int setBounty(CommandContext<ServerCommandSource> context, ServerPlayerEntity player, ServerCommandSource contextServer) throws CommandSyntaxException {
+    public static int setBounty(CommandContext<ServerCommandSource> context, ServerPlayerEntity target, ServerCommandSource contextServer) throws CommandSyntaxException {
         final ServerCommandSource source = context.getSource();
         final ServerPlayerEntity sender = source.getPlayer();
-        ServerPlayerEntity target = player;
         if(sender == null) {
             source.sendFeedback(()-> Text.literal("You must be a player to use this command!"), false);
             return 0;
@@ -39,19 +39,21 @@ public class SetBountyCommand {
             return 0;
         }
         */
+        if(CurrencyManager.getCurrency(target.getUuid()) == -1) {
+            CurrencyManager.setCurrency(target.getUuid(), 0);
+        }
+
+        if(CurrencyManager.getCurrency(target.getUuid()) > 0) {
+            source.sendFeedback(()-> Text.literal("That player already has a bounty!"), false);
+            return 0;
+        }
 
         try {
-            SetBountyGUI bountyGUI = new SetBountyGUI(sender, false);
+            SetBountyGUI bountyGUI = new SetBountyGUI(sender, false, contextServer, target);
             bountyGUI.open();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
-            players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set" + "test").formatted(Formatting.RED)));
-        }
-
-        context.getSource().sendFeedback(()-> Text.literal("msg").formatted(Formatting.YELLOW), false);
 
         return 0;
     }
