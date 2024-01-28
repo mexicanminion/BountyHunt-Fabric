@@ -34,13 +34,14 @@ public class SetBountyCommand {
             return 0;
         }
 
-        if(sender == target) {
+        /*if(sender == target) {
             source.sendFeedback(()-> Text.literal("You cannot set a bounty on yourself!"), false);
             return 0;
         }
+        */
 
         try {
-            SetBountyGUI bountyGUI = new SetBountyGUI(sender, true);
+            SetBountyGUI bountyGUI = new SetBountyGUI(sender, false);
             bountyGUI.open();
         } catch (Exception e) {
             e.printStackTrace();
