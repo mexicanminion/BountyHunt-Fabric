@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.mexicanminion.bountyhunt.gui.SetBountyGUI;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +27,7 @@ public class SetBountyCommand {
 
     public static int setBounty(CommandContext<ServerCommandSource> context, ServerPlayerEntity player, ServerCommandSource contextServer) throws CommandSyntaxException {
         final ServerCommandSource source = context.getSource();
-        final PlayerEntity sender = source.getPlayer();
+        final ServerPlayerEntity sender = source.getPlayer();
         ServerPlayerEntity target = player;
         if(sender == null) {
             source.sendFeedback(()-> Text.literal("You must be a player to use this command!"), false);
@@ -38,8 +39,15 @@ public class SetBountyCommand {
             return 0;
         }
 
+        try {
+            SetBountyGUI bountyGUI = new SetBountyGUI(sender, true);
+            bountyGUI.open();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
-            players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set" + Text.literal("test")).formatted(Formatting.RED)));
+            players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set" + "test").formatted(Formatting.RED)));
         }
 
         context.getSource().sendFeedback(()-> Text.literal("msg").formatted(Formatting.YELLOW), false);
