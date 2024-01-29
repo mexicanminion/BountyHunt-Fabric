@@ -5,8 +5,10 @@ import com.mojang.brigadier.context.CommandContext;
 import net.mexicanminion.bountyhunt.gui.ClaimBountyGUI;
 import net.mexicanminion.bountyhunt.gui.SetBountyGUI;
 import net.mexicanminion.bountyhunt.managers.BountyManager;
+import net.mexicanminion.bountyhunt.managers.RewardManager;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -22,7 +24,7 @@ public class ClaimBountyCommand {
                         .executes(context -> claimBounty(context, EntityArgumentType.getPlayer(context, "player"), context.getSource()))));
     }
 
-    public static int claimBounty(CommandContext<ServerCommandSource> context, ServerPlayerEntity target, ServerCommandSource contextServer) {
+    public static int claimBounty(CommandContext<ServerCommandSource> context, PlayerEntity target, ServerCommandSource contextServer) {
         final ServerCommandSource source = context.getSource();
         final ServerPlayerEntity sender = source.getPlayer();
         if(sender == null) {
@@ -30,16 +32,8 @@ public class ClaimBountyCommand {
             return 0;
         }
 
-        if(BountyManager.getBounty(target.getUuid()) == sender.getUuid()) {
-            source.sendFeedback(()-> Text.literal("You can't claim your own bounty!"), false);
-            return 0;
-        } else if (BountyManager.getBounty(target.getUuid()) == target.getUuid()) {
-            source.sendFeedback(()-> Text.literal("The bounty is still active!!"), false);
-            return 0;
-        }
-
-        if(BountyManager.getBounty(target.getUuid()) == null) {
-            source.sendFeedback(()-> Text.literal("That player doesn't have a bounty! Set one using /setbounty (playername)!"), false);
+        if(RewardManager.getReward(sender.getUuid()) == 0 || RewardManager.getReward(sender.getUuid()) == -1) {
+            source.sendFeedback(()-> Text.literal("You don't have a bounty to claim!"), false);
             return 0;
         }
 

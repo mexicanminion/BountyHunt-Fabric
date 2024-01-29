@@ -3,6 +3,7 @@ package net.mexicanminion.bountyhunt.gui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.CurrencyManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -12,7 +13,7 @@ import net.minecraft.text.Text;
 
 public class ClaimBountyGUI extends SimpleGui {
 
-    public ServerPlayerEntity target;
+    public PlayerEntity target;
 
 
     /**
@@ -22,7 +23,7 @@ public class ClaimBountyGUI extends SimpleGui {
      * @param manipulatePlayerSlots if <code>true</code> the players inventory
      *                              will be treated as slots of this gui
      */
-    public ClaimBountyGUI(ServerPlayerEntity player, boolean manipulatePlayerSlots, ServerCommandSource contextServer, ServerPlayerEntity target) {
+    public ClaimBountyGUI(ServerPlayerEntity player, boolean manipulatePlayerSlots, ServerCommandSource contextServer, PlayerEntity target) {
         super(ScreenHandlerType.GENERIC_9X6, player, manipulatePlayerSlots);
 
         this.target = target;
@@ -35,7 +36,7 @@ public class ClaimBountyGUI extends SimpleGui {
             this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
         }
 
-        this.setSlot(5, new GuiElementBuilder(Items.DIAMOND_SWORD)
+        this.setSlot(4, new GuiElementBuilder(Items.DIAMOND_SWORD)
                 .setName(Text.literal("Reward: Diamonds").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .addLoreLine(Text.literal("Make sure you have enough inventory space!").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .hideFlags());

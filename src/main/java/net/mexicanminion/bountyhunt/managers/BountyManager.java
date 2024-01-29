@@ -11,7 +11,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class BountyManager {
 
-    public static HashMap<UUID,UUID> bountyMap = new HashMap<>();
+    public static HashMap<UUID,Boolean> bountyMap = new HashMap<>();
 
     public void saveBountyFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
@@ -41,7 +41,7 @@ public class BountyManager {
                 throw new IOException("Data is not a HashMap");
             }
 
-            bountyMap = (HashMap<UUID, UUID>) readObject;
+            bountyMap = (HashMap<UUID, Boolean>) readObject;
             for(UUID key : bountyMap.keySet()){
                 bountyMap.put(key, bountyMap.get(key));
             }
@@ -49,11 +49,14 @@ public class BountyManager {
         }
     }
 
-    public static void setBounty(UUID bounty, UUID rewarder) {
-        bountyMap.put(bounty, rewarder);
+    public static void setBounty(UUID bounty, boolean setBounty) {
+        bountyMap.put(bounty, setBounty);
     }
 
-    public static UUID getBounty(UUID bounty) {
+    public static boolean getBounty(UUID bounty) {
+        if (bountyMap.get(bounty) == null) {
+            return false;
+        }
         return bountyMap.get(bounty);
     }
 

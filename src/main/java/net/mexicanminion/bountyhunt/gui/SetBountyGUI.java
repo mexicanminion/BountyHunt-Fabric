@@ -52,24 +52,25 @@ public class SetBountyGUI extends SimpleGui {
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
                 .setName(Text.literal("Confirm with " + amount + " diamonds?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .setCallback(((index, clickType, action) -> this.close())));
+                .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
 
         this.setSlot(50, new GuiElementBuilder()
                 .setItem(Items.BARRIER)
                 .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
+                .setCallback(((index, clickType, action) -> this.close())));
 
     }
 
     public void confirmDiamondsUpdate(){
         CurrencyManager.setCurrency(target.getUuid(), amount);
-        BountyManager.setBounty(target.getUuid(), target.getUuid());
+        BountyManager.setBounty(target.getUuid(), true);
         for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
             players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
             players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount + " diamond(s)").formatted(Formatting.YELLOW)));
         }
         isPlayerDone = true;
         this.close();
+
     }
 
     public void purchaseType(boolean initial){
@@ -108,7 +109,11 @@ public class SetBountyGUI extends SimpleGui {
                 player.sendMessage(Text.of("You do not have enough diamonds to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
             }
         }
-        confirmDiamondsUpdate();
+
+        this.setSlot(48, new GuiElementBuilder()
+                .setItem(Items.LIME_CONCRETE)
+                .setName(Text.literal("Confirm with " + amount + " diamonds?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
     }
 
     public boolean removeItemFromInventory (ServerPlayerEntity player, Item itemToRemove, int quantity){

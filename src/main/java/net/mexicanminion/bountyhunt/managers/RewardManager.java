@@ -7,18 +7,19 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class CurrencyManager {
+public class RewardManager {
 
-    public static HashMap<UUID, Integer> currencyMap = new HashMap<UUID, Integer>();
+    public static HashMap<UUID, Integer> rewardMap = new HashMap<UUID, Integer>();
 
-    public void saveCurrencyFile() throws FileNotFoundException, IOException {
+
+    public void saveRewardFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
-        File file = new File(bountyDir, "currency.dat");
+        File file = new File(bountyDir, "reward.dat");
 
         ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
         try{
-            output.writeObject(currencyMap);
+            output.writeObject(rewardMap);
             output.flush();
             output.close();
         } catch(IOException e){
@@ -26,7 +27,7 @@ public class CurrencyManager {
         }
     }
 
-    public void loadCurrencyFile() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public void loadRewardFile() throws FileNotFoundException, IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "currency.dat");
 
@@ -39,27 +40,23 @@ public class CurrencyManager {
                 throw new IOException("Data is not a HashMap");
             }
 
-            currencyMap = (HashMap<UUID, Integer>) readObject;
-            for(UUID key : currencyMap.keySet()){
-                currencyMap.put(key, currencyMap.get(key));
+            rewardMap = (HashMap<UUID, Integer>) readObject;
+            for(UUID key : rewardMap.keySet()){
+                rewardMap.put(key, rewardMap.get(key));
             }
 
         }
 
     }
 
-    public static void setCurrency(UUID uuid, Integer amount) {
-        currencyMap.put(uuid, amount);
+    public static void setReward(UUID uuid, Integer amount) {
+        rewardMap.put(uuid, amount);
     }
 
-    public static int getCurrency(UUID uuid) {
-        if(currencyMap.get(uuid) == null) {
+    public static int getReward(UUID uuid) {
+        if(rewardMap.get(uuid) == null) {
             return -1;
         }
-        return currencyMap.get(uuid);
-    }
-
-    public static void emptyCurrency(UUID uuid) {
-        currencyMap.put(uuid, null);
+        return rewardMap.get(uuid);
     }
 }
