@@ -3,6 +3,7 @@ package net.mexicanminion.bountyhunt;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.CurrencyManager;
 import net.mexicanminion.bountyhunt.util.Register;
