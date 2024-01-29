@@ -2,6 +2,7 @@ package net.mexicanminion.bountyhunt.gui;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
+import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.CurrencyManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,34 +43,27 @@ public class SetBountyGUI extends SimpleGui {
             this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
         }
 
-        this.setSlot(13, new GuiElementBuilder(Items.DIAMOND_SWORD).setName(Text.of("Select Amount")).setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
+        this.setSlot(13, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
         purchaseType(true);
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " diamonds?").setStyle(Style.EMPTY.withItalic(true)))
+                .setName(Text.literal("Confirm with " + amount + " diamonds?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> this.close())));
 
         this.setSlot(50, new GuiElementBuilder()
                 .setItem(Items.BARRIER)
-                .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true)))
-                .setCallback(((index, clickType, action) -> confirmBounty())));
+                .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
 
-    }
-
-    public void confirmBounty(){
-        CurrencyManager.setCurrency(target.getUuid(), amount);
-        for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
-            players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.toString()).formatted(Formatting.RED)));
-            players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount + "diamond(s)").formatted(Formatting.YELLOW)));
-        }
-        isPlayerDone = true;
-        this.close();
     }
 
     public void confirmDiamondsUpdate(){
         CurrencyManager.setCurrency(target.getUuid(), amount);
+        BountyManager.setBounty(target.getUuid(), target.getUuid());
         for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
             players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
             players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount + " diamond(s)").formatted(Formatting.YELLOW)));
