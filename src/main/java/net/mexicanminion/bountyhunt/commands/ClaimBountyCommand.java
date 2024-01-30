@@ -20,11 +20,10 @@ public class ClaimBountyCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(CommandManager.literal("claimbounty")
-                .then(argument("player", EntityArgumentType.player())
-                        .executes(context -> claimBounty(context, EntityArgumentType.getPlayer(context, "player"), context.getSource()))));
+                .executes(context -> claimBounty(context, context.getSource())));
     }
 
-    public static int claimBounty(CommandContext<ServerCommandSource> context, PlayerEntity target, ServerCommandSource contextServer) {
+    public static int claimBounty(CommandContext<ServerCommandSource> context, ServerCommandSource contextServer) {
         final ServerCommandSource source = context.getSource();
         final ServerPlayerEntity sender = source.getPlayer();
         if(sender == null) {
@@ -38,7 +37,7 @@ public class ClaimBountyCommand {
         }
 
         try {
-            ClaimBountyGUI bountyGUI = new ClaimBountyGUI(sender, false, contextServer, target);
+            ClaimBountyGUI bountyGUI = new ClaimBountyGUI(sender, false, contextServer);
             bountyGUI.open();
         } catch (Exception e) {
             e.printStackTrace();
