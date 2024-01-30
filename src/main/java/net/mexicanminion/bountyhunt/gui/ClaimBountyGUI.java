@@ -47,34 +47,54 @@ public class ClaimBountyGUI extends SimpleGui {
         int dStacks = 0;
         int dRemainder = 0;
         int stackAmount = 0;
+        int row = 0;
+        int rowRemainder = 0;
 
         if(dAmount % 64 != 0){
             if (dAmount < 64){
-                dStacks = 0;
+                dStacks = 1;
                 dRemainder = dAmount;
-                stackAmount = 1;
             }else {
-                dStacks = (dAmount / 64);
+                dStacks = (dAmount / 64)+1;
                 dRemainder = dAmount % 64;
-                stackAmount = dStacks+1;
             }
         }else {
             dStacks = (dAmount / 64);
-            stackAmount = dStacks+1;
+        }
+
+        stackAmount = dStacks;
+
+        if(dStacks % 9 != 0){
+            if (dStacks < 9){
+                row = 1;
+                rowRemainder = dStacks;
+            }else {
+                row = (dStacks / 9)+1;
+                rowRemainder = dStacks % 9;
+            }
+        }else {
+            row = (dStacks / 9);
         }
 
         if(dRemainder == 0){
-            for(int i = 22-dStacks; i < dStacks + 23 ; i++){
+            for(int i = 18 + (4-(dStacks/2)); i < 23 + (dStacks/2); i++){
                 this.setSlot(i, new GuiElementBuilder(Items.DIAMOND, 64));
             }
         }else {
-            for(int i = 22-dStacks; i < dStacks + 23 ; i++){
-                if(stackAmount == 1){
-                    this.setSlot(i, new GuiElementBuilder(Items.DIAMOND, dRemainder));
-                    break;
-                }else {
-                    this.setSlot(i, new GuiElementBuilder(Items.DIAMOND, 64));
-                    stackAmount--;
+            //row
+            for(int i = 18; i <= 9 + (row*9); i += 9){
+                //column
+                for(int j = i + (4-(dStacks/2)); j < 23 + (dStacks/2); i++){
+                    if (stackAmount == 0){
+                        break;
+                    }
+                    else if(stackAmount == 1){
+                        this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, dRemainder));
+                        break;
+                    }else {
+                        this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, 64));
+                        stackAmount--;
+                    }
                 }
             }
         }
