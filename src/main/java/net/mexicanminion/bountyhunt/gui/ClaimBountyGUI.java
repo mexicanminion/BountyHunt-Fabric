@@ -26,7 +26,7 @@ public class ClaimBountyGUI extends SimpleGui {
         super(ScreenHandlerType.GENERIC_9X6, player, manipulatePlayerSlots);
 
         this.setLockPlayerInventory(false);
-        this.setTitle(Text.of("Set Bounty"));
+        this.setTitle(Text.of("Claim Bounty"));
         this.reOpen = true;
 
         for(int i = 0; i < 54; i++){
@@ -90,12 +90,12 @@ public class ClaimBountyGUI extends SimpleGui {
                 this.setSlot(i, new GuiElementBuilder(Items.DIAMOND, 64));
             }*/
             for(int i = 18; i <= 9 + (row*9); i += 9){
-                player.sendMessage(Text.of("Row: " + i), false);
+                //player.sendMessage(Text.of("Row: " + i), false);
                 //column
                 if(stackAmount > stackRemainder){
-                    player.sendMessage(Text.of("Some row"), false);
+                    //player.sendMessage(Text.of("Some row"), false);
                     for(int j = i; j <= (i+8); j++){
-                        player.sendMessage(Text.of("Slot: " + j), false);
+                        //player.sendMessage(Text.of("Slot: " + j), false);
                         if (stackAmount == 0){
                             break;
                         }else {
@@ -104,9 +104,9 @@ public class ClaimBountyGUI extends SimpleGui {
                         }
                     }
                 }else{
-                    player.sendMessage(Text.of("Final row"), false);
+                    //player.sendMessage(Text.of("Final row"), false);
                     for(int j = i + (4-(stackRemainder/2)); j <= (j + stackRemainder); j++){
-                        player.sendMessage(Text.of("Slot: " + j), false);
+                        //player.sendMessage(Text.of("Slot: " + j), false);
                         if (stackAmount == 0){
                             break;
                         }else {
@@ -119,12 +119,12 @@ public class ClaimBountyGUI extends SimpleGui {
         }else {
             //row
             for(int i = 18; i <= 9 + (row*9); i += 9){
-                player.sendMessage(Text.of("Row: " + i), false);
+               // player.sendMessage(Text.of("Row: " + i), false);
                 //column
                 if(stackAmount > stackRemainder){
-                    player.sendMessage(Text.of("Some row"), false);
+                    //player.sendMessage(Text.of("Some row"), false);
                     for(int j = i; j <= (i+8); j++){
-                        player.sendMessage(Text.of("Slot: " + j), false);
+                        //player.sendMessage(Text.of("Slot: " + j), false);
                         if (stackAmount == 0){
                             break;
                         }
@@ -137,9 +137,9 @@ public class ClaimBountyGUI extends SimpleGui {
                         }
                     }
                 }else{
-                    player.sendMessage(Text.of("Final row"), false);
+                    //player.sendMessage(Text.of("Final row"), false);
                     for(int j = i + (4-(stackRemainder/2)); j <= (j + stackRemainder); j++){
-                        player.sendMessage(Text.of("Slot: " + j), false);
+                        //player.sendMessage(Text.of("Slot: " + j), false);
                         if (stackAmount == 0){
                             break;
                         }
