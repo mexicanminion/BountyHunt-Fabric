@@ -29,12 +29,12 @@ public class SetBountyCommand {
             source.sendFeedback(()-> Text.literal("You must be a player to use this command!"), false);
             return 0;
         }
-        //TODO: Remove this check when testing is done
-        /*if(sender == target) {
+
+        if(sender == target) {
             source.sendFeedback(()-> Text.literal("You cannot set a bounty on yourself!"), false);
             return 0;
         }
-        */
+
         if(CurrencyManager.getCurrency(target.getUuid()) == -1) {
             CurrencyManager.setCurrency(target.getUuid(), 0);
         }

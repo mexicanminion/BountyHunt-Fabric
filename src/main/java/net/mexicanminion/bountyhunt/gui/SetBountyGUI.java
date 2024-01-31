@@ -43,8 +43,7 @@ public class SetBountyGUI extends SimpleGui {
             this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
         }
 
-        //todo: make block and item so player knwows what they are adding when red condcr2qr
-        this.setSlot(13, new GuiElementBuilder(Items.DIAMOND_SWORD)
+        this.setSlot(13, new GuiElementBuilder(Items.DIAMOND)
                 .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
@@ -63,6 +62,10 @@ public class SetBountyGUI extends SimpleGui {
     }
 
     public void confirmDiamondsUpdate(){
+        if(amount == 0){
+            player.sendMessage(Text.of("You must add at least 1 diamond to set a bounty"), true);
+            return;
+        }
         CurrencyManager.setCurrency(target.getUuid(), amount);
         BountyManager.setBounty(target.getUuid(), true);
         for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
@@ -79,65 +82,82 @@ public class SetBountyGUI extends SimpleGui {
             enteringBlocks = !enteringBlocks;
         }
 
-        //todo: Redconcrete is does not spawn in once valideAmount is false
-        validateAmount(29,1, true);
-        validateAmount(30,2, true);
-        validateAmount(31,10, true);
-        validateAmount(32,32, true);
-        validateAmount(33,64, true);
-
         if (enteringBlocks){
-            this.setSlot(29, new GuiElementBuilder(Items.DIAMOND_BLOCK, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
+            this.setSlot(13, new GuiElementBuilder(Items.DIAMOND_BLOCK)
+                    .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
+
+            validateAmount(29, Items.DIAMOND_BLOCK,1, false);
+            validateAmount(30, Items.DIAMOND_BLOCK,2, false);
+            validateAmount(31, Items.DIAMOND_BLOCK,10, false);
+            validateAmount(32, Items.DIAMOND_BLOCK,32, false);
+            validateAmount(33, Items.DIAMOND_BLOCK,64, false);
+            /*this.setSlot(29, new GuiElementBuilder(Items.DIAMOND_BLOCK, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
             this.setSlot(30, new GuiElementBuilder(Items.DIAMOND_BLOCK, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> validateAmount(30, 2, false))));
             this.setSlot(31, new GuiElementBuilder(Items.DIAMOND_BLOCK, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> validateAmount(31, 10, false))));
             this.setSlot(32, new GuiElementBuilder(Items.DIAMOND_BLOCK, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> validateAmount(32, 32, false))));
             this.setSlot(33, new GuiElementBuilder(Items.DIAMOND_BLOCK, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> validateAmount(33, 64, false))));
+            */
         }
+
         else {
-            this.setSlot(29, new GuiElementBuilder(Items.DIAMOND, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
+            this.setSlot(13, new GuiElementBuilder(Items.DIAMOND)
+                    .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
+
+            validateAmount(29, Items.DIAMOND,1, false);
+            validateAmount(30, Items.DIAMOND,2, false);
+            validateAmount(31, Items.DIAMOND,10, false);
+            validateAmount(32, Items.DIAMOND,32, false);
+            validateAmount(33, Items.DIAMOND,64, false);
+            /*this.setSlot(29, new GuiElementBuilder(Items.DIAMOND, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
             this.setSlot(30, new GuiElementBuilder(Items.DIAMOND, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> validateAmount(30, 2, false))));
             this.setSlot(31, new GuiElementBuilder(Items.DIAMOND, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> validateAmount(31, 10, false))));
             this.setSlot(32, new GuiElementBuilder(Items.DIAMOND, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> validateAmount(32, 32, false))));
             this.setSlot(33, new GuiElementBuilder(Items.DIAMOND, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> validateAmount(33, 64, false))));
+            */
         }
 
-        validateAmount(29,1, true);
-        validateAmount(30,2, true);
-        validateAmount(31,10, true);
-        validateAmount(32,32, true);
-        validateAmount(33,64, true);
+
     }
 
-    public void validateAmount(int slot, int count, boolean check){
+    public void validateAmount(int slot, Item item,int count, boolean addDiamonds){
         if(enteringBlocks){
             count *= 9;
             if(amount + count > 2304){ //2304 is 36 stacks which is the temp limit
                 this.setSlot(slot, new GuiElementBuilder(Items.RED_CONCRETE, count/9).setName(Text.of("This would exceed the limit!")));
-                return;
+            }else {
+                count /= 9;
+                int finalCount = count;
+                if (addDiamonds)
+                    setDiamonds(count);
+                this.setSlot(slot, new GuiElementBuilder(item, count).setName(Text.of(""+ count)).setCallback(((index, clickType, action) -> validateAmount(slot, item, finalCount, true))));
             }
-            count /= 9;
         }else {
             if(amount + count > 2304){ //2304 is 36 stacks which is the temp limit
                 this.setSlot(slot, new GuiElementBuilder(Items.RED_CONCRETE, count).setName(Text.of("This would exceed the limit!")));
-                return;
+            }else {
+                int finalCount = count;
+                if (addDiamonds)
+                    setDiamonds(count);
+                this.setSlot(slot, new GuiElementBuilder(item, count).setName(Text.of(""+ count)).setCallback(((index, clickType, action) -> validateAmount(slot, item, finalCount, true))));
             }
         }
-
-        if(!check)
-            setDiamonds(count);
+        if (addDiamonds)
+            purchaseType(true);
     }
 
     public void setDiamonds(int dAmount){
         if(enteringBlocks){
             //dAmount *= 9;
             if(removeItemFromInventory(player, Items.DIAMOND_BLOCK, dAmount)){
-                player.sendMessage(Text.of("You have added " + dAmount + " diamond blocks to " + player.getDisplayName().getString() + "'s bounty"), false);
+                //player.sendMessage(Text.of("You have added " + dAmount + " diamond blocks to " + player.getDisplayName().getString() + "'s bounty"), false);
             } else {
-                player.sendMessage(Text.of("You do not have enough diamond blocks to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
+                player.sendMessage(Text.of("You do not have enough diamond blocks to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);
             }
         }else {
             if(removeItemFromInventory(player, Items.DIAMOND, dAmount)){
-                player.sendMessage(Text.of("You have added " + dAmount + " diamonds to " + player.getDisplayName().getString() + "'s bounty"), false);
+                //player.sendMessage(Text.of("You have added " + dAmount + " diamonds to " + player.getDisplayName().getString() + "'s bounty"), false);
             } else {
                 player.sendMessage(Text.of("You do not have enough diamonds to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
             }
@@ -185,7 +205,11 @@ public class SetBountyGUI extends SimpleGui {
         super.onClose();
         if(!isPlayerDone){
             for(int i = 0; i < amount; i++){
-                player.getInventory().insertStack(new ItemStack(Items.DIAMOND, 1));
+                if(player.getInventory().getEmptySlot() == -1){
+                    player.dropItem(new ItemStack(Items.DIAMOND, 1), true);
+                }else {
+                    player.getInventory().insertStack(new ItemStack(Items.DIAMOND, 1));
+                }
             }
         }
 
