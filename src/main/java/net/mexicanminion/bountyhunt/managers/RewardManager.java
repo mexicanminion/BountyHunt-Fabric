@@ -29,7 +29,7 @@ public class RewardManager {
 
     public void loadRewardFile() throws FileNotFoundException, IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
-        File file = new File(bountyDir, "currency.dat");
+        File file = new File(bountyDir, "reward.dat");
 
         if(file != null){
             ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));

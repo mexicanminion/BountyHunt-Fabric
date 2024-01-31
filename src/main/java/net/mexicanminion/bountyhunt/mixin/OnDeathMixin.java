@@ -35,15 +35,12 @@ public class OnDeathMixin {
 
     private void checkBounty(PlayerEntity target, DamageSource damageSource){
         if(!BountyManager.getBounty(target.getUuid())){
-            target.sendMessage(Text.of("No Active bounty"), false);
             return;
         }
         if((damageSource.getAttacker() == null)){
-            target.sendMessage(Text.of("You were killed by nature!"), false);
             return;
         }
         if(damageSource.isIndirect()) {
-            target.sendMessage(Text.of("You can't claim your own bounty!"), false);
             return;
         }
         if(BountyManager.getBounty(target.getUuid())){
@@ -53,6 +50,9 @@ public class OnDeathMixin {
             damageSource.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
             target.sendMessage(Text.of("You have been cleared of your burden"), false);
             for (ServerPlayerEntity players : server.getPlayerManager().getPlayerList()) {
+                if ((players == damageSource.getAttacker()) || (players == target)) {
+                    continue;
+                }
                 players.sendMessage(Text.of("The bounty on " + target.getEntityName() + " has been claimed!"), false);
             }
         }

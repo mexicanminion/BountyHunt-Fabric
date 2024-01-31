@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.CurrencyManager;
+import net.mexicanminion.bountyhunt.managers.RewardManager;
 import net.mexicanminion.bountyhunt.util.Register;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class BountyHuntMod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("BountyHunt is initializing!");
 
 		String path = Paths.get("", "bountyhunt").toString();
 
@@ -47,8 +48,11 @@ public class BountyHuntMod implements ModInitializer {
 			}
 			CurrencyManager currencyManager = new CurrencyManager();
 			BountyManager bountyManager = new BountyManager();
-			currencyManager.saveCurrencyFile();
-			bountyManager.saveBountyFile();
+			RewardManager rewardManager = new RewardManager();
+			currencyManager.loadCurrencyFile();
+			bountyManager.loadBountyFile();
+			rewardManager.loadRewardFile();
+			LOGGER.info("BountyHunt: Loaded currency, bounty, and reward files.");
 
 		}
 		catch (Exception e) {
@@ -57,15 +61,19 @@ public class BountyHuntMod implements ModInitializer {
 
 
 		Register.register();
+		LOGGER.info("BountyHunt has been initialized!");
 	}
 
 	public static void onServerShutdown() throws IOException {
-		LOGGER.info("Bye Fabric world!");
+		LOGGER.info("BountyHunt is shutting down!");
 
 		CurrencyManager currencyManager = new CurrencyManager();
 		BountyManager bountyManager = new BountyManager();
+		RewardManager rewardManager = new RewardManager();
 		currencyManager.saveCurrencyFile();
 		bountyManager.saveBountyFile();
+		rewardManager.saveRewardFile();
+		LOGGER.info("BountyHunt: Saved currency, bounty, and reward files.");
 	}
 
 }

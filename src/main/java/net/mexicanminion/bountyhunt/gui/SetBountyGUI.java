@@ -43,6 +43,7 @@ public class SetBountyGUI extends SimpleGui {
             this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
         }
 
+        //todo: make block and item so player knwows what they are adding when red condcr2qr
         this.setSlot(13, new GuiElementBuilder(Items.DIAMOND_SWORD)
                 .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
@@ -78,25 +79,57 @@ public class SetBountyGUI extends SimpleGui {
             enteringBlocks = !enteringBlocks;
         }
 
+        //todo: Redconcrete is does not spawn in once valideAmount is false
+        validateAmount(29,1, true);
+        validateAmount(30,2, true);
+        validateAmount(31,10, true);
+        validateAmount(32,32, true);
+        validateAmount(33,64, true);
+
         if (enteringBlocks){
-            this.setSlot(29, new GuiElementBuilder(Items.DIAMOND_BLOCK, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> setDiamonds(1))));
-            this.setSlot(30, new GuiElementBuilder(Items.DIAMOND_BLOCK, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> setDiamonds(2))));
-            this.setSlot(31, new GuiElementBuilder(Items.DIAMOND_BLOCK, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> setDiamonds(10))));
-            this.setSlot(32, new GuiElementBuilder(Items.DIAMOND_BLOCK, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> setDiamonds(32))));
-            this.setSlot(33, new GuiElementBuilder(Items.DIAMOND_BLOCK, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> setDiamonds(64))));
+            this.setSlot(29, new GuiElementBuilder(Items.DIAMOND_BLOCK, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
+            this.setSlot(30, new GuiElementBuilder(Items.DIAMOND_BLOCK, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> validateAmount(30, 2, false))));
+            this.setSlot(31, new GuiElementBuilder(Items.DIAMOND_BLOCK, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> validateAmount(31, 10, false))));
+            this.setSlot(32, new GuiElementBuilder(Items.DIAMOND_BLOCK, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> validateAmount(32, 32, false))));
+            this.setSlot(33, new GuiElementBuilder(Items.DIAMOND_BLOCK, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> validateAmount(33, 64, false))));
         }
         else {
-            this.setSlot(29, new GuiElementBuilder(Items.DIAMOND, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> setDiamonds(1))));
-            this.setSlot(30, new GuiElementBuilder(Items.DIAMOND, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> setDiamonds(2))));
-            this.setSlot(31, new GuiElementBuilder(Items.DIAMOND, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> setDiamonds(10))));
-            this.setSlot(32, new GuiElementBuilder(Items.DIAMOND, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> setDiamonds(32))));
-            this.setSlot(33, new GuiElementBuilder(Items.DIAMOND, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> setDiamonds(64))));
+            this.setSlot(29, new GuiElementBuilder(Items.DIAMOND, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
+            this.setSlot(30, new GuiElementBuilder(Items.DIAMOND, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> validateAmount(30, 2, false))));
+            this.setSlot(31, new GuiElementBuilder(Items.DIAMOND, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> validateAmount(31, 10, false))));
+            this.setSlot(32, new GuiElementBuilder(Items.DIAMOND, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> validateAmount(32, 32, false))));
+            this.setSlot(33, new GuiElementBuilder(Items.DIAMOND, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> validateAmount(33, 64, false))));
         }
+
+        validateAmount(29,1, true);
+        validateAmount(30,2, true);
+        validateAmount(31,10, true);
+        validateAmount(32,32, true);
+        validateAmount(33,64, true);
+    }
+
+    public void validateAmount(int slot, int count, boolean check){
+        if(enteringBlocks){
+            count *= 9;
+            if(amount + count > 2304){ //2304 is 36 stacks which is the temp limit
+                this.setSlot(slot, new GuiElementBuilder(Items.RED_CONCRETE, count/9).setName(Text.of("This would exceed the limit!")));
+                return;
+            }
+            count /= 9;
+        }else {
+            if(amount + count > 2304){ //2304 is 36 stacks which is the temp limit
+                this.setSlot(slot, new GuiElementBuilder(Items.RED_CONCRETE, count).setName(Text.of("This would exceed the limit!")));
+                return;
+            }
+        }
+
+        if(!check)
+            setDiamonds(count);
     }
 
     public void setDiamonds(int dAmount){
         if(enteringBlocks){
-            dAmount *= 9;
+            //dAmount *= 9;
             if(removeItemFromInventory(player, Items.DIAMOND_BLOCK, dAmount)){
                 player.sendMessage(Text.of("You have added " + dAmount + " diamond blocks to " + player.getDisplayName().getString() + "'s bounty"), false);
             } else {
@@ -119,7 +152,11 @@ public class SetBountyGUI extends SimpleGui {
     public boolean removeItemFromInventory (ServerPlayerEntity player, Item itemToRemove, int quantity){
         int i = 0;
         if(player.getInventory().count(itemToRemove) >= quantity) {
-            amount += quantity;
+            if(itemToRemove.equals(Items.DIAMOND)){
+                amount += quantity;
+            } else {
+                amount += quantity * 9;
+            }
             while(quantity > 0){
                 if(player.getInventory().getStack(i).getItem().equals(itemToRemove)){
                     if(player.getInventory().getStack(i).getCount() == quantity){
