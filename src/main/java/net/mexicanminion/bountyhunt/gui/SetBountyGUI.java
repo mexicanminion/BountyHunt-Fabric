@@ -45,6 +45,7 @@ public class SetBountyGUI extends SimpleGui {
 
         this.setSlot(13, new GuiElementBuilder(Items.DIAMOND)
                 .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .addLoreLine(Text.literal("Click to switch between diamonds and diamond blocks").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                 .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
         purchaseType(true);
