@@ -21,6 +21,7 @@ public class BountyHuntMod implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger("bountyhunt");
 
+	// Register the server shutdown event
 	static {
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
 			try {
@@ -41,11 +42,13 @@ public class BountyHuntMod implements ModInitializer {
 
 		String path = Paths.get("", "bountyhunt").toString();
 
+		// Create the directory for data files if it doesn't exist
 		try {
 			boolean exists = (new File(path)).exists();
 			if (!exists) {
 				new File(path).mkdir();
 			}
+			// Load the currency, bounty, and reward files
 			CurrencyManager currencyManager = new CurrencyManager();
 			BountyManager bountyManager = new BountyManager();
 			RewardManager rewardManager = new RewardManager();
@@ -60,10 +63,12 @@ public class BountyHuntMod implements ModInitializer {
 		}
 
 
+		// Register the commands
 		Register.register();
 		LOGGER.info("BountyHunt has been initialized!");
 	}
 
+	// Save the currency, bounty, and reward files when the server is shutting down
 	public static void onServerShutdown() throws IOException {
 		LOGGER.info("BountyHunt is shutting down!");
 

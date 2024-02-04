@@ -16,34 +16,45 @@ import static net.minecraft.server.command.CommandManager.argument;
 
 
 public class SetBountyCommand {
+
+    // Registers the command setbounty
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(CommandManager.literal("setbounty")
                         .then(argument("player", EntityArgumentType.player())
                                 .executes(context -> setBounty(context, EntityArgumentType.getPlayer(context, "player"), context.getSource()))));
+        //registers the command setbounty with the perameter player then calls the setBounty method
     }
 
+    // Sets the bounty on a player
     public static int setBounty(CommandContext<ServerCommandSource> context, ServerPlayerEntity target, ServerCommandSource contextServer) throws CommandSyntaxException {
+        // Gets the source of the command assigns it to a ServerPlayerEntity object
         final ServerCommandSource source = context.getSource();
         final ServerPlayerEntity sender = source.getPlayer();
+
+        // Checks if the sender is null, is so its from console; disallow
         if(sender == null) {
             source.sendFeedback(()-> Text.literal("You must be a player to use this command!"), false);
             return 0;
         }
 
+        // Checks if the sender is the target, if so disallow
         if(sender == target) {
             source.sendFeedback(()-> Text.literal("You cannot set a bounty on yourself!"), false);
             return 0;
         }
 
+        // Checks if the target has a bounty, if so disallow
         if(CurrencyManager.getCurrency(target.getUuid()) == -1) {
             CurrencyManager.setCurrency(target.getUuid(), 0);
         }
 
+        // Checks if the target has a bounty, if so disallow
         if(CurrencyManager.getCurrency(target.getUuid()) > 0) {
             source.sendFeedback(()-> Text.literal("That player already has a bounty!"), false);
             return 0;
         }
 
+        // Opens the SetBountyGUI
         try {
             SetBountyGUI bountyGUI = new SetBountyGUI(sender, false, contextServer, target);
             bountyGUI.open();

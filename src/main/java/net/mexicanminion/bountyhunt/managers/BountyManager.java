@@ -13,6 +13,12 @@ public class BountyManager {
 
     public static HashMap<UUID,Boolean> bountyMap = new HashMap<>();
 
+    /**
+     * saveBountyFile()
+     * Description: Save the bounty file
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void saveBountyFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bounty.dat");
@@ -28,6 +34,13 @@ public class BountyManager {
         }
     }
 
+    /**
+     * loadBountyFile()
+     * Description: Load the bounty file
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void loadBountyFile() throws FileNotFoundException, IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bounty.dat");
@@ -49,10 +62,22 @@ public class BountyManager {
         }
     }
 
+    /**
+     * setBounty()
+     * Description: Set the bounty
+     * @param bounty
+     * @param setBounty
+     */
     public static void setBounty(UUID bounty, boolean setBounty) {
         bountyMap.put(bounty, setBounty);
     }
 
+    /**
+     * getBounty()
+     * Description: Get the bounty status
+     * @param bounty
+     * @return
+     */
     public static boolean getBounty(UUID bounty) {
         if (bountyMap.get(bounty) == null) {
             return false;
@@ -60,6 +85,11 @@ public class BountyManager {
         return bountyMap.get(bounty);
     }
 
+    /**
+     * removeBounty()
+     * Description: Remove the bounty buy setting it to null
+     * @param bounty
+     */
     public static void removeBounty(UUID bounty) {
         bountyMap.put(bounty, null);
     }

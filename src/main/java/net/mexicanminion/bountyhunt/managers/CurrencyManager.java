@@ -11,6 +11,12 @@ public class CurrencyManager {
 
     public static HashMap<UUID, Integer> currencyMap = new HashMap<UUID, Integer>();
 
+    /**
+     * saveCurrencyFile()
+     * Description: Save the currency file
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void saveCurrencyFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "currency.dat");
@@ -26,6 +32,13 @@ public class CurrencyManager {
         }
     }
 
+    /**
+     * loadCurrencyFile()
+     * Description: Load the currency file
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void loadCurrencyFile() throws FileNotFoundException, IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "currency.dat");
@@ -48,10 +61,22 @@ public class CurrencyManager {
 
     }
 
+    /**
+     * setCurrency()
+     * Description: Set the currency
+     * @param uuid
+     * @param amount
+     */
     public static void setCurrency(UUID uuid, Integer amount) {
         currencyMap.put(uuid, amount);
     }
 
+    /**
+     * getCurrency()
+     * Description: Get the currency
+     * @param uuid
+     * @return
+     */
     public static int getCurrency(UUID uuid) {
         if(currencyMap.get(uuid) == null) {
             return -1;
@@ -59,6 +84,11 @@ public class CurrencyManager {
         return currencyMap.get(uuid);
     }
 
+    /**
+     * emptyCurrency()
+     * Description: Empty the currency buy setting it to null
+     * @param uuid
+     */
     public static void emptyCurrency(UUID uuid) {
         currencyMap.put(uuid, null);
     }

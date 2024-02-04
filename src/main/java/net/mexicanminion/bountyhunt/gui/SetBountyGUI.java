@@ -62,13 +62,21 @@ public class SetBountyGUI extends SimpleGui {
 
     }
 
+    /**
+     * confirmDiamondsUpdate()
+     * Description: This method confirms the amount of diamonds,
+     *              Runs when the player clicks the confirm button
+     */
     public void confirmDiamondsUpdate(){
         if(amount == 0){
             player.sendMessage(Text.of("You must add at least 1 diamond to set a bounty"), true);
             return;
         }
+        //update the currency and set the bounty
         CurrencyManager.setCurrency(target.getUuid(), amount);
         BountyManager.setBounty(target.getUuid(), true);
+
+        //send the title and subtitle to everyone on the server
         for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
             players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
             players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount + " diamond(s)").formatted(Formatting.YELLOW)));
@@ -78,6 +86,13 @@ public class SetBountyGUI extends SimpleGui {
 
     }
 
+    /**
+     * purchaseType()
+     * Description: This method switches the purchase type between diamonds and diamond blocks
+     *              Runs when the player clicks the diamond or diamond block item
+     * @param initial: whether or not this is the first time the method is being called
+     *                 (if it is, it will not switch the purchase type)
+     */
     public void purchaseType(boolean initial){
         if (!initial){
             enteringBlocks = !enteringBlocks;
@@ -93,12 +108,6 @@ public class SetBountyGUI extends SimpleGui {
             validateAmount(31, Items.DIAMOND_BLOCK,10, false);
             validateAmount(32, Items.DIAMOND_BLOCK,32, false);
             validateAmount(33, Items.DIAMOND_BLOCK,64, false);
-            /*this.setSlot(29, new GuiElementBuilder(Items.DIAMOND_BLOCK, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
-            this.setSlot(30, new GuiElementBuilder(Items.DIAMOND_BLOCK, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> validateAmount(30, 2, false))));
-            this.setSlot(31, new GuiElementBuilder(Items.DIAMOND_BLOCK, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> validateAmount(31, 10, false))));
-            this.setSlot(32, new GuiElementBuilder(Items.DIAMOND_BLOCK, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> validateAmount(32, 32, false))));
-            this.setSlot(33, new GuiElementBuilder(Items.DIAMOND_BLOCK, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> validateAmount(33, 64, false))));
-            */
         }
 
         else {
@@ -111,17 +120,20 @@ public class SetBountyGUI extends SimpleGui {
             validateAmount(31, Items.DIAMOND,10, false);
             validateAmount(32, Items.DIAMOND,32, false);
             validateAmount(33, Items.DIAMOND,64, false);
-            /*this.setSlot(29, new GuiElementBuilder(Items.DIAMOND, 1).setName(Text.of("1")).setCallback(((index, clickType, action) -> validateAmount(29, 1, false))));
-            this.setSlot(30, new GuiElementBuilder(Items.DIAMOND, 2).setName(Text.of("2")).setCallback(((index, clickType, action) -> validateAmount(30, 2, false))));
-            this.setSlot(31, new GuiElementBuilder(Items.DIAMOND, 10).setName(Text.of("10")).setCallback(((index, clickType, action) -> validateAmount(31, 10, false))));
-            this.setSlot(32, new GuiElementBuilder(Items.DIAMOND, 32).setName(Text.of("32")).setCallback(((index, clickType, action) -> validateAmount(32, 32, false))));
-            this.setSlot(33, new GuiElementBuilder(Items.DIAMOND, 64).setName(Text.of("64")).setCallback(((index, clickType, action) -> validateAmount(33, 64, false))));
-            */
         }
 
 
     }
 
+    /**
+     * validateAmount()
+     * Description: This method validates the amount of diamonds or diamond blocks
+     *              Runs when the player clicks the diamond or diamond block item
+     * @param slot: the slot to set the item in
+     * @param item: the item to set in the slot
+     * @param count: the amount of the item to set in the slot
+     * @param addDiamonds: whether or not to add the diamonds to the player's inventory
+     */
     public void validateAmount(int slot, Item item,int count, boolean addDiamonds){
         if(enteringBlocks){
             count *= 9;
@@ -170,6 +182,14 @@ public class SetBountyGUI extends SimpleGui {
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
     }
 
+    /**
+     * removeItemFromInventory()
+     * Description: This method removes the specified item from the player's inventory
+     * @param player: the player to remove the item from
+     * @param itemToRemove: the item to remove
+     * @param quantity: the amount of the item to remove
+     * @return: whether or not the item was removed
+     */
     public boolean removeItemFromInventory (ServerPlayerEntity player, Item itemToRemove, int quantity){
         int i = 0;
         if(player.getInventory().count(itemToRemove) >= quantity) {
@@ -201,6 +221,11 @@ public class SetBountyGUI extends SimpleGui {
         }
     }
 
+    /**
+     * onClose()
+     * Description: This method runs when the player closes the GUI
+     *              It returns the diamonds to the player's inventory
+     */
     @Override
     public void onClose() {
         super.onClose();

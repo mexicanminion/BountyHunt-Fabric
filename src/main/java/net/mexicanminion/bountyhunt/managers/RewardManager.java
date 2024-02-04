@@ -11,7 +11,12 @@ public class RewardManager {
 
     public static HashMap<UUID, Integer> rewardMap = new HashMap<UUID, Integer>();
 
-
+    /**
+     * saveRewardFile()
+     * Description: Save the reward file
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void saveRewardFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "reward.dat");
@@ -27,6 +32,13 @@ public class RewardManager {
         }
     }
 
+    /**
+     * loadRewardFile()
+     * Description: Load the reward file
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void loadRewardFile() throws FileNotFoundException, IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "reward.dat");
@@ -49,10 +61,22 @@ public class RewardManager {
 
     }
 
+    /**
+     * setReward()
+     * Description: Set the reward
+     * @param uuid
+     * @param amount
+     */
     public static void setReward(UUID uuid, Integer amount) {
         rewardMap.put(uuid, amount);
     }
 
+    /**
+     * getReward()
+     * Description: Get the reward
+     * @param uuid
+     * @return
+     */
     public static int getReward(UUID uuid) {
         if(rewardMap.get(uuid) == null) {
             return -1;
