@@ -1,5 +1,7 @@
 package net.mexicanminion.bountyhunt.managers;
 
+import net.mexicanminion.bountyhunt.util.BountyData;
+
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.HashMap;
