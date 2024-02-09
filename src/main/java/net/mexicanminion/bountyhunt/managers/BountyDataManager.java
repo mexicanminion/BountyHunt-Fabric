@@ -5,13 +5,14 @@ import net.mexicanminion.bountyhunt.util.BountyData;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class BountyDataManager {
 
-    public static BountyData[] bountyData;
+    public static List<BountyData> bountyData;
 
     public void saveBountyDataFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
@@ -29,7 +30,7 @@ public class BountyDataManager {
     }
 
     /**
-     * loadBountyFile()
+     * loadBountyDataFile()
      * Description: Load the bounty file
      * @throws FileNotFoundException
      * @throws IOException
@@ -44,13 +45,37 @@ public class BountyDataManager {
             Object readObject = input.readObject();
             input.close();
 
-            if(!(readObject instanceof HashMap)){
-                throw new IOException("Data is not a HashMap");
+            if(!(readObject instanceof List)){
+                throw new IOException("Data is not a BountyData[]");
             }
 
-            bountyData = (BountyData[]) readObject;
-
+            bountyData = (List<BountyData>) readObject;
 
         }
     }
+
+    public static void setBountyData(UUID player, BountyData playerData){
+        if(getBountyData(player) == null){
+            bountyData.add(playerData);
+            return;
+        }
+
+        for(int i = 0; i < bountyData.size(); i++){
+            if(bountyData.get(i).getUUID().equals(player)){
+                bountyData.set(i, playerData);
+                return;
+            }
+        }
+    }
+
+    public static BountyData getBountyData(UUID player){
+        for(BountyData data : bountyData) {
+            if (data.getUUID().equals(player)) {
+                return data;
+            }
+        }
+        return null;
+    }
+
+
 }
