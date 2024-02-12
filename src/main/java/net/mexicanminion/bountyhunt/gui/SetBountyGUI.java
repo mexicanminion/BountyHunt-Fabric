@@ -3,7 +3,6 @@ package net.mexicanminion.bountyhunt.gui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.BountyManager;
-import net.mexicanminion.bountyhunt.managers.CurrencyManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -73,8 +72,8 @@ public class SetBountyGUI extends SimpleGui {
             return;
         }
         //update the currency and set the bounty
-        CurrencyManager.setCurrency(target.getUuid(), amount);
-        BountyManager.setBounty(target.getUuid(), true);
+        //CurrencyManager.setCurrency(target.getUuid(), amount);
+        BountyManager.setBounty(target.getUuid(), true, amount);
 
         //send the title and subtitle to everyone on the server
         for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {

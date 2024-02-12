@@ -223,7 +223,7 @@ public class ClaimBountyGUI extends SimpleGui {
             }
         }
         //set the reward to 0
-        RewardManager.setReward(player.getUuid(), 0);
+        RewardManager.setReward(player.getUuid(), false, 0);
         this.close();
     }
 }

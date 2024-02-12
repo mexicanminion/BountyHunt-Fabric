@@ -3,15 +3,33 @@ package net.mexicanminion.bountyhunt.managers;
 import net.mexicanminion.bountyhunt.util.BountyData;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 public class RewardManager {
 
-    public static HashMap<UUID, Integer> rewardMap = new HashMap<UUID, Integer>();
+
+    public static void setReward(UUID rewarder, boolean hasReward,int value) {
+        if(BountyDataManager.getBountyData(rewarder) == null){
+            BountyDataManager.setBountyData(rewarder, new BountyData(rewarder, false, hasReward, value));
+            return;
+        }
+        BountyDataManager.getBountyData(rewarder).setHasReward(hasReward);
+        BountyDataManager.getBountyData(rewarder).setValue(value);
+    }
+
+
+
+    public static int getReward(UUID bounty) {
+        if(BountyDataManager.getBountyData(bounty) == null || !BountyDataManager.getBountyData(bounty).getHasReward()){
+            return -1;
+        }
+        return BountyDataManager.getBountyData(bounty).getValue();
+    }
+
+
+
+
+    //public static HashMap<UUID, Integer> rewardMap = new HashMap<UUID, Integer>();
 
     /**
      * saveRewardFile()
@@ -19,7 +37,7 @@ public class RewardManager {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void saveRewardFile() throws FileNotFoundException, IOException {
+    /*public void saveRewardFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "reward.dat");
 
@@ -32,7 +50,7 @@ public class RewardManager {
         } catch(IOException e){
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * loadRewardFile()
@@ -41,7 +59,7 @@ public class RewardManager {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void loadRewardFile() throws FileNotFoundException, IOException, ClassNotFoundException {
+    /*public void loadRewardFile() throws FileNotFoundException, IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "reward.dat");
 
@@ -61,7 +79,9 @@ public class RewardManager {
 
         }
 
-    }
+    }*/
+
+
 
     /**
      * setReward()
@@ -69,9 +89,10 @@ public class RewardManager {
      * @param uuid
      * @param amount
      */
-    public static void setReward(UUID uuid, Integer amount) {
+    /*public static void setReward(UUID uuid, Integer amount) {
         rewardMap.put(uuid, amount);
     }
+     */
 
     /**
      * getReward()
@@ -79,10 +100,10 @@ public class RewardManager {
      * @param uuid
      * @return
      */
-    public static int getReward(UUID uuid) {
+    /*public static int getReward(UUID uuid) {
         if(rewardMap.get(uuid) == null) {
             return -1;
         }
         return rewardMap.get(uuid);
-    }
+    }*/
 }

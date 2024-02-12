@@ -2,7 +2,7 @@ package net.mexicanminion.bountyhunt.util;
 
 import java.util.UUID;
 
-public class BountyData {
+public class BountyData implements java.io.Serializable {
 
     UUID uuid;
     boolean hasBounty;

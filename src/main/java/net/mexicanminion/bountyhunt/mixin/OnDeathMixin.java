@@ -1,7 +1,6 @@
 package net.mexicanminion.bountyhunt.mixin;
 
 import net.mexicanminion.bountyhunt.managers.BountyManager;
-import net.mexicanminion.bountyhunt.managers.CurrencyManager;
 import net.mexicanminion.bountyhunt.managers.RewardManager;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.MinecraftServer;
@@ -58,9 +57,9 @@ public class OnDeathMixin {
         //check if the player who died had a bounty
         if(BountyManager.getBounty(target.getUuid())){
             //if they did, give the bounty to the player who killed them (SET REWARD, REMOVE BOUNTY AND CURRENCY)
-            BountyManager.setBounty(target.getUuid(), false);
-            RewardManager.setReward(target.getAttacker().getUuid(), CurrencyManager.getCurrency(target.getUuid()));
-            CurrencyManager.emptyCurrency(target.getUuid());
+            RewardManager.setReward(target.getAttacker().getUuid(), true, BountyManager.getBountyValue(target.getUuid()));
+            BountyManager.setBounty(target.getUuid(), false, 0);
+            //CurrencyManager.emptyCurrency(target.getUuid());
             target.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
             target.sendMessage(Text.of("You have been cleared of your burden"), false);
             for (ServerPlayerEntity players : server.getPlayerManager().getPlayerList()) {

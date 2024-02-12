@@ -4,7 +4,10 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.mexicanminion.bountyhunt.gui.SetBountyGUI;
+import net.mexicanminion.bountyhunt.managers.BountyDataManager;
+import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.CurrencyManager;
+import net.mexicanminion.bountyhunt.util.BountyData;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -44,12 +47,12 @@ public class SetBountyCommand {
         }
 
         // Checks if the target has a bounty, if so disallow
-        if(CurrencyManager.getCurrency(target.getUuid()) == -1) {
-            CurrencyManager.setCurrency(target.getUuid(), 0);
+        if(BountyDataManager.getBountyData(target.getUuid()) == null) {
+            BountyDataManager.setBountyData(target.getUuid(), new BountyData(target.getUuid(), false, false, 0));
         }
 
         // Checks if the target has a bounty, if so disallow
-        if(CurrencyManager.getCurrency(target.getUuid()) > 0) {
+        if(BountyDataManager.getBountyData(target.getUuid()).getHasBounty()) {
             source.sendFeedback(()-> Text.literal("That player already has a bounty!"), false);
             return 0;
         }

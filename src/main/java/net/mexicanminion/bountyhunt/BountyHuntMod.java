@@ -4,8 +4,8 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.mexicanminion.bountyhunt.managers.BountyDataManager;
 import net.mexicanminion.bountyhunt.managers.BountyManager;
-import net.mexicanminion.bountyhunt.managers.CurrencyManager;
 import net.mexicanminion.bountyhunt.managers.RewardManager;
 import net.mexicanminion.bountyhunt.util.Register;
 import org.slf4j.Logger;
@@ -49,12 +49,9 @@ public class BountyHuntMod implements ModInitializer {
 				new File(path).mkdir();
 			}
 			// Load the currency, bounty, and reward files
-			CurrencyManager currencyManager = new CurrencyManager();
-			BountyManager bountyManager = new BountyManager();
-			RewardManager rewardManager = new RewardManager();
-			currencyManager.loadCurrencyFile();
-			bountyManager.loadBountyFile();
-			rewardManager.loadRewardFile();
+
+			BountyDataManager bountyDataManager = new BountyDataManager();
+			bountyDataManager.loadBountyDataFile();
 			LOGGER.info("BountyHunt: Loaded currency, bounty, and reward files.");
 
 		}
@@ -71,13 +68,9 @@ public class BountyHuntMod implements ModInitializer {
 	// Save the currency, bounty, and reward files when the server is shutting down
 	public static void onServerShutdown() throws IOException {
 		LOGGER.info("BountyHunt is shutting down!");
+		BountyDataManager bountyDataManager = new BountyDataManager();
+		bountyDataManager.saveBountyDataFile();
 
-		CurrencyManager currencyManager = new CurrencyManager();
-		BountyManager bountyManager = new BountyManager();
-		RewardManager rewardManager = new RewardManager();
-		currencyManager.saveCurrencyFile();
-		bountyManager.saveBountyFile();
-		rewardManager.saveRewardFile();
 		LOGGER.info("BountyHunt: Saved currency, bounty, and reward files.");
 	}
 

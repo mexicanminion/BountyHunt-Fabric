@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+@Deprecated
 public class CurrencyManager {
 
     public static HashMap<UUID, Integer> currencyMap = new HashMap<UUID, Integer>();

@@ -1,17 +1,42 @@
 package net.mexicanminion.bountyhunt.managers;
 
-import java.io.*;
+import net.mexicanminion.bountyhunt.util.BountyData;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+
 
 public class BountyManager {
 
-    public static HashMap<UUID,Boolean> bountyMap = new HashMap<>();
+    public static void setBounty(UUID bounty, boolean setBounty, int value) {
+        if(BountyDataManager.getBountyData(bounty) == null){
+            BountyDataManager.setBountyData(bounty, new BountyData(bounty, setBounty, false, value));
+            return;
+        }
+        BountyDataManager.getBountyData(bounty).setHasBounty(setBounty);
+        BountyDataManager.getBountyData(bounty).setValue(value);
+    }
+
+
+
+    public static boolean getBounty(UUID bounty) {
+        if(BountyDataManager.getBountyData(bounty) == null){
+            return false;
+        }
+        return BountyDataManager.getBountyData(bounty).getHasBounty();
+    }
+
+    public static int getBountyValue(UUID bounty) {
+        if(BountyDataManager.getBountyData(bounty) == null){
+            return 0;
+        }
+        return BountyDataManager.getBountyData(bounty).getValue();
+    }
+
+
+
+    //public static HashMap<UUID,Boolean> bountyMap = new HashMap<>();
 
     /**
      * saveBountyFile()
@@ -19,7 +44,7 @@ public class BountyManager {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void saveBountyFile() throws FileNotFoundException, IOException {
+    /*public void saveBountyFile() throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bounty.dat");
 
@@ -32,7 +57,7 @@ public class BountyManager {
         } catch(IOException e){
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * loadBountyFile()
@@ -41,7 +66,7 @@ public class BountyManager {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void loadBountyFile() throws FileNotFoundException, IOException, ClassNotFoundException {
+    /*public void loadBountyFile() throws FileNotFoundException, IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bounty.dat");
 
@@ -60,7 +85,17 @@ public class BountyManager {
             }
 
         }
+    }*/
+
+    /**
+     * removeBounty()
+     * Description: Remove the bounty buy setting it to null
+     * @param bounty
+     */
+    /*public static void removeBounty(UUID bounty) {
+        bountyMap.put(bounty, null);
     }
+     */
 
     /**
      * setBounty()
@@ -68,9 +103,10 @@ public class BountyManager {
      * @param bounty
      * @param setBounty
      */
-    public static void setBounty(UUID bounty, boolean setBounty) {
+    /*public static void setBounty(UUID bounty, boolean setBounty) {
         bountyMap.put(bounty, setBounty);
     }
+     */
 
     /**
      * getBounty()
@@ -78,20 +114,12 @@ public class BountyManager {
      * @param bounty
      * @return
      */
-    public static boolean getBounty(UUID bounty) {
+    /*public static boolean getBounty(UUID bounty) {
         if (bountyMap.get(bounty) == null) {
             return false;
         }
         return bountyMap.get(bounty);
     }
-
-    /**
-     * removeBounty()
-     * Description: Remove the bounty buy setting it to null
-     * @param bounty
      */
-    public static void removeBounty(UUID bounty) {
-        bountyMap.put(bounty, null);
-    }
 
 }
