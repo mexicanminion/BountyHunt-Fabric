@@ -5,7 +5,6 @@ import net.mexicanminion.bountyhunt.util.BountyData;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
