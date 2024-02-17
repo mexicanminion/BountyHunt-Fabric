@@ -4,8 +4,7 @@ import net.mexicanminion.bountyhunt.util.BountyData;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -68,61 +67,25 @@ public class BountyDataManager {
         return bountyData.get(player);
     }
 
-    /*public static int getBountyValue(UUID player){
-        for(BountyData data : bountyData) {
-            if (data.getUUID().equals(player)) {
-                return data.getValue();
+    public static List<BountyData> getBountyData(){
+        List<BountyData> bountyList = new ArrayList<>();
+        for(UUID key : bountyData.keySet()){
+            if(bountyData.get(key).getHasBounty()){
+                bountyList.add(bountyData.get(key));
             }
         }
-        return -1;
+        return bountyList;
     }
 
-    public static boolean getBountyStatus(UUID player){
-        for(BountyData data : bountyData) {
-            if (data.getUUID().equals(player)) {
-                return data.getHasBounty();
+    public static int getActiveBountyAmount(){
+        int activeBountyAmount = 0;
+        for(UUID key : bountyData.keySet()){
+            if(bountyData.get(key).getHasBounty()){
+                activeBountyAmount++;
             }
         }
-        return false;
+
+        return activeBountyAmount;
     }
-
-    public static boolean getRewardStatus(UUID player){
-        for(BountyData data : bountyData) {
-            if (data.getUUID().equals(player)) {
-                return data.getHasReward();
-            }
-        }
-        return false;
-    }
-
-    public static void setBountyStatus(UUID player, boolean status){
-        for(int i = 0; i < bountyData.size(); i++){
-            if(bountyData.get(i).getUUID().equals(player)){
-                bountyData.get(i).setHasBounty(status);
-                return;
-            }
-        }
-    }
-
-    public static void setRewardStatus(UUID player, boolean status){
-        for(int i = 0; i < bountyData.size(); i++){
-            if(bountyData.get(i).getUUID().equals(player)){
-                bountyData.get(i).setHasReward(status);
-                return;
-            }
-        }
-    }
-
-    public static void setBountyValue(UUID player, int value){
-        for(int i = 0; i < bountyData.size(); i++){
-            if(bountyData.get(i).getUUID().equals(player)){
-                bountyData.get(i).setValue(value);
-                return;
-            }
-        }
-    }
-
-     */
-
 
 }

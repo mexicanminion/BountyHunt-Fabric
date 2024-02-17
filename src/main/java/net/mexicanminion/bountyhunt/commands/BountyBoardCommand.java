@@ -28,7 +28,7 @@ public class BountyBoardCommand {
         }
 
         try {
-            BountyBoardGUI bountyBoardGUI = new BountyBoardGUI(sender, false);
+            BountyBoardGUI bountyBoardGUI = new BountyBoardGUI(sender, false, contextServer);
             bountyBoardGUI.open();
         } catch (Exception e) {
             e.printStackTrace();
