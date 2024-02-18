@@ -14,7 +14,6 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.List;
-import java.util.Map;
 
 public class BountyBoardGUI extends SimpleGui {
 
@@ -22,6 +21,7 @@ public class BountyBoardGUI extends SimpleGui {
 
     int currPage = 1;
     int maxPage;
+    int currHead = 0;
     int maxHeadPerPage = 28;
     int currFirstHead = 0;
     int nextFirstHead = maxHeadPerPage;
@@ -83,24 +83,39 @@ public class BountyBoardGUI extends SimpleGui {
 
         //check if bountyList is null or empty
         if(bountyList == null || bountyList.isEmpty()){
-            this.setSlot(30, new GuiElementBuilder(Items.PLAYER_HEAD)
+            this.setSlot(22, new GuiElementBuilder(Items.PLAYER_HEAD)
                     .setName(Text.literal("No Bounties Available!").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                     .hideFlags());
             return;
         }
 
 
-        //String temp = https://sessionserver.mojang.com/session/minecraft/profile/65778a9ae3a1412985e7dc57a377515c?unsigned=false
-        //Map temp = server.getSessionService().getTextures(player.getGameProfile(), false);
-        //server.getSessionService().getTextures(player.getGameProfile(), false).get(1).toString();
-        //server.getSessionService().getTextures(server.getPlayerManager().getPlayer(UUID).getGameProfile(), false).get(MinecraftProfileTexture.Type.SKIN);
+        //server.getPlayerManager().getPlayer(bountyList.get(0).getUUID()).getEntityName(); GRABS FROM ONLINE PLAYERS ONLY, NOT FROM OFFLINE
+        //server.getPlayerManager().getPlayer(bountyList.get(0).getUUID()).getGameProfile(); GRABS FROM ONLINE PLAYERS ONLY, NOT FROM OFFLINE
 
-        for(int i = 0; i < bountyList.size(); i++){
+        /*for(int i = 0; i < bountyList.size(); i++){
             this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
-                    .setName(Text.literal(server.getPlayerManager().getPlayer(bountyList.get(i).getUUID()).getEntityName()))
+                    .setName(Text.literal(bountyList.get(i).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                     .hideFlags()
-                    .setSkullOwner("temp", null, bountyList.get(i).getUUID()));
+                    .setSkullOwner(bountyList.get(i).getGameProfile(), server));
 
+        }*/
+
+        for (int i = 10; i <= 44; i++) {
+            if(i == 17 || i == 26 || i == 35 || i == 44){
+                i += 1;
+                continue;
+            }
+            if(currHead > bountyList.size()-1){
+                //empty slot
+                this.setSlot(i, new GuiElementBuilder(Items.AIR));
+            }else {
+                this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
+                        .setName(Text.literal(bountyList.get(currHead).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                        .hideFlags()
+                        .setSkullOwner(bountyList.get(currHead).getGameProfile(), server));
+            }
+            currHead++;
         }
     }
 }

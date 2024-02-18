@@ -57,8 +57,8 @@ public class OnDeathMixin {
         //check if the player who died had a bounty
         if(BountyManager.getBounty(target.getUuid())){
             //if they did, give the bounty to the player who killed them (SET REWARD, REMOVE BOUNTY AND CURRENCY)
-            RewardManager.setReward(target.getAttacker().getUuid(), true, BountyManager.getBountyValue(target.getUuid()));
-            BountyManager.setBounty(target.getUuid(), false, 0);
+            RewardManager.setReward(target.getAttacker().getUuid(), true, BountyManager.getBountyValue(target.getUuid()), target.getGameProfile(), target.getEntityName());
+            BountyManager.setBounty(target.getUuid(), false, 0, null, null);//TODO marker just incase this breaks something, you know
             //CurrencyManager.emptyCurrency(target.getUuid());
             target.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
             target.sendMessage(Text.of("You have been cleared of your burden"), false);

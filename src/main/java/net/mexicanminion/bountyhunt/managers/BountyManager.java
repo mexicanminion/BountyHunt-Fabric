@@ -1,5 +1,6 @@
 package net.mexicanminion.bountyhunt.managers;
 
+import com.mojang.authlib.GameProfile;
 import net.mexicanminion.bountyhunt.util.BountyData;
 
 import java.io.FileNotFoundException;
@@ -9,9 +10,9 @@ import java.util.UUID;
 
 public class BountyManager {
 
-    public static void setBounty(UUID bounty, boolean setBounty, int value) {
+    public static void setBounty(UUID bounty, boolean setBounty, int value, GameProfile gameProfile, String playerName) {
         if(BountyDataManager.getBountyData(bounty) == null){
-            BountyDataManager.setBountyData(bounty, new BountyData(bounty, setBounty, false, value));
+            BountyDataManager.setBountyData(bounty, new BountyData(bounty, setBounty, false, value, gameProfile, playerName));
             return;
         }
         BountyDataManager.getBountyData(bounty).setHasBounty(setBounty);

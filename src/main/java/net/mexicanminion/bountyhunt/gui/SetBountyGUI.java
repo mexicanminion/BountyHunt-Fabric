@@ -73,7 +73,7 @@ public class SetBountyGUI extends SimpleGui {
         }
         //update the currency and set the bounty
         //CurrencyManager.setCurrency(target.getUuid(), amount);
-        BountyManager.setBounty(target.getUuid(), true, amount);
+        BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getEntityName());
 
         //send the title and subtitle to everyone on the server
         for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
