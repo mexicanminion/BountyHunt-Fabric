@@ -1,6 +1,7 @@
 package net.mexicanminion.bountyhunt.managers;
 
 import net.mexicanminion.bountyhunt.util.BountyData;
+import org.slf4j.Logger;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -13,7 +14,7 @@ public class BountyDataManager {
     //public static List<BountyData> bountyData;
     public static HashMap<UUID,BountyData> bountyData = new HashMap<>();
 
-    public void saveBountyDataFile() throws FileNotFoundException, IOException {
+    public void saveBountyDataFile(Logger logger) throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
 
@@ -23,8 +24,10 @@ public class BountyDataManager {
             output.writeObject(bountyData);
             output.flush();
             output.close();
+            logger.info("Saved BountyHunt files.");
         } catch(IOException e){
             e.printStackTrace();
+            logger.info("Failed to save BountyHunt files.");
         }
     }
 

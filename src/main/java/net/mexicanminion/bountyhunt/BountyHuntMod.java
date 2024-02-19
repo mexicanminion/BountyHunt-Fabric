@@ -52,16 +52,23 @@ public class BountyHuntMod implements ModInitializer {
 
 			BountyDataManager bountyDataManager = new BountyDataManager();
 			bountyDataManager.loadBountyDataFile();
-			LOGGER.info("BountyHunt: Loaded currency, bounty, and reward files.");
+			LOGGER.info("BountyHunt: Loaded BountyHunt files.");
 
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			if((new File(path)).exists()){
+				LOGGER.info("Created `bountyhunt` directory.");
+			}else{
+				e.printStackTrace();
+				LOGGER.info("Error loading BountyHunt files.");
+			}
 		}
 
 
 		// Register the commands
 		Register.register();
+		LOGGER.info("BountyHunt: Registered commands.");
+
 		LOGGER.info("BountyHunt has been initialized!");
 	}
 
@@ -69,9 +76,9 @@ public class BountyHuntMod implements ModInitializer {
 	public static void onServerShutdown() throws IOException {
 		LOGGER.info("BountyHunt is shutting down!");
 		BountyDataManager bountyDataManager = new BountyDataManager();
-		bountyDataManager.saveBountyDataFile();
+		bountyDataManager.saveBountyDataFile(LOGGER);
 
-		LOGGER.info("BountyHunt: Saved currency, bounty, and reward files.");
+		LOGGER.info("BountyHunt has been shut down!");
 	}
 
 }
