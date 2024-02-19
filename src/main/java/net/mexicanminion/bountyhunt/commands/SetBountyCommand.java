@@ -48,7 +48,7 @@ public class SetBountyCommand {
 
         // Checks if the target has a bounty, if so disallow
         if(BountyDataManager.getBountyData(target.getUuid()) == null) {
-            BountyDataManager.setBountyData(target.getUuid(), new BountyData(target.getUuid(), false, false, 0, target.getGameProfile(), target.getEntityName()));
+            BountyDataManager.setBountyData(target.getUuid(), new BountyData(target.getUuid(), false, false, 0, 0, target.getGameProfile(), target.getEntityName()));
         }
 
         // Checks if the target has a bounty, if so disallow

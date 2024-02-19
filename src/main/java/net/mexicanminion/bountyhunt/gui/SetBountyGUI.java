@@ -42,10 +42,12 @@ public class SetBountyGUI extends SimpleGui {
             this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
         }
 
-        this.setSlot(13, new GuiElementBuilder(Items.DIAMOND)
+        this.setSlot(13, new GuiElementBuilder()
+                .setItem(Items.DIAMOND)
                 .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .addLoreLine(Text.literal("Click to switch between diamonds and diamond blocks").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
+                .hideFlags()
+                .setCallback(((index, clickType, action) -> {purchaseType(false);})));
 
         purchaseType(true);
 
@@ -100,6 +102,7 @@ public class SetBountyGUI extends SimpleGui {
         if (enteringBlocks){
             this.setSlot(13, new GuiElementBuilder(Items.DIAMOND_BLOCK)
                     .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .addLoreLine(Text.literal("Click to switch between diamonds and diamond blocks").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                     .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
             validateAmount(29, Items.DIAMOND_BLOCK,1, false);
@@ -112,6 +115,7 @@ public class SetBountyGUI extends SimpleGui {
         else {
             this.setSlot(13, new GuiElementBuilder(Items.DIAMOND)
                     .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .addLoreLine(Text.literal("Click to switch between diamonds and diamond blocks").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                     .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
             validateAmount(29, Items.DIAMOND,1, false);

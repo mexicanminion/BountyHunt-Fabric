@@ -9,16 +9,18 @@ public class BountyData implements java.io.Serializable {
     UUID uuid;
     boolean hasBounty;
     boolean hasReward;
-    int value;
+    int bountyValue;
+    int rewardValue;
     UUID GPid;
     String GPname;
     String playerName;
 
-    public BountyData(UUID uuid, boolean hasBounty, boolean hasReward, int value, GameProfile gameProfile, String playerName){
+    public BountyData(UUID uuid, boolean hasBounty, boolean hasReward, int bountyValue, int rewardValue, GameProfile gameProfile, String playerName){
         this.uuid = uuid;
         this.hasBounty = hasBounty;
         this.hasReward = hasReward;
-        this.value = value;
+        this.bountyValue = bountyValue;
+        this.rewardValue = rewardValue;
         this.GPid = gameProfile.getId();
         this.GPname = gameProfile.getName();
         this.playerName = playerName;
@@ -36,8 +38,12 @@ public class BountyData implements java.io.Serializable {
         return hasReward;
     }
 
-    public int getValue(){
-        return value;
+    public int getBountyValue(){
+        return bountyValue;
+    }
+
+    public int getRewardValue(){
+        return rewardValue;
     }
 
     public GameProfile getGameProfile(){
@@ -56,8 +62,12 @@ public class BountyData implements java.io.Serializable {
         this.hasReward = hasReward;
     }
 
-    public void setValue(int value){
-        this.value = value;
+    public void setBountyValue(int value){
+        this.bountyValue = value;
+    }
+
+    public void setRewardValue(int value){
+        this.rewardValue = value;
     }
 
 }

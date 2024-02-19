@@ -11,11 +11,11 @@ public class RewardManager {
 
     public static void setReward(UUID rewarder, boolean hasReward, int value, GameProfile gameProfile, String playerName) {
         if(BountyDataManager.getBountyData(rewarder) == null){
-            BountyDataManager.setBountyData(rewarder, new BountyData(rewarder, false, hasReward, value, gameProfile, playerName));
+            BountyDataManager.setBountyData(rewarder, new BountyData(rewarder, BountyDataManager.getBountyData(rewarder).getHasBounty(), hasReward, BountyDataManager.getBountyData(rewarder).getBountyValue(), value, gameProfile, playerName));
             return;
         }
         BountyDataManager.getBountyData(rewarder).setHasReward(hasReward);
-        BountyDataManager.getBountyData(rewarder).setValue(value);
+        BountyDataManager.getBountyData(rewarder).setRewardValue(value);
     }
 
 
@@ -24,7 +24,7 @@ public class RewardManager {
         if(BountyDataManager.getBountyData(bounty) == null || !BountyDataManager.getBountyData(bounty).getHasReward()){
             return -1;
         }
-        return BountyDataManager.getBountyData(bounty).getValue();
+        return BountyDataManager.getBountyData(bounty).getRewardValue();
     }
 
 

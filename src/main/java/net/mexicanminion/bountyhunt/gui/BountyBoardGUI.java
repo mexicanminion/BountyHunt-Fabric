@@ -1,6 +1,5 @@
 package net.mexicanminion.bountyhunt.gui;
 
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
@@ -10,8 +9,10 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.List;
 
@@ -49,22 +50,17 @@ public class BountyBoardGUI extends SimpleGui {
                 .setName(Text.literal("Back Page").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .hideFlags()
                 .setSkullOwner(PlayerHeads.LEFT)
-                .setCallback(((index, clickType, action) -> {this.close();})));
+                .setCallback(((index, clickType, action) -> prevPage())));
 
         setMaxPage();
-        this.setSlot(49, new GuiElementBuilder()
-                .setItem(Items.PLAYER_HEAD)
-                .setName(Text.literal("Page: " + currPage + " of " + maxPage).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .hideFlags()
-                .setSkullOwner(PlayerHeads.INFO)
-                .setCallback(((index, clickType, action) -> this.close())));
+        setPageButton();
 
         this.setSlot(50, new GuiElementBuilder()
                 .setItem(Items.PLAYER_HEAD)
                 .setName(Text.literal("Next Page").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .hideFlags()
                 .setSkullOwner(PlayerHeads.RIGHT)
-                .setCallback(((index, clickType, action) -> this.close())));
+                .setCallback(((index, clickType, action) -> nextPage())));
 
         spawnHeads();
     }
@@ -78,29 +74,41 @@ public class BountyBoardGUI extends SimpleGui {
         this.maxPage = maxPage;
     }
 
+    public void nextPage(){
+        if(currPage == maxPage){
+            return;
+        }
+        currPage++;
+        currFirstHead = nextFirstHead;
+        currHead = nextFirstHead;
+        spawnHeads();
+        setPageButton();
+    }
+
+    public void prevPage(){
+        if(currPage == 1){
+            return;
+        }
+        currPage--;
+        currHead = currFirstHead - maxHeadPerPage;
+        spawnHeads();
+        setPageButton();
+    }
+
     public void spawnHeads(){
         List<BountyData> bountyList = BountyDataManager.getBountyData();
 
-        //check if bountyList is null or empty
-        if(bountyList == null || bountyList.isEmpty()){
+        //check if bountyList empty
+        if(bountyList.isEmpty()){
             this.setSlot(22, new GuiElementBuilder(Items.PLAYER_HEAD)
                     .setName(Text.literal("No Bounties Available!").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                     .hideFlags());
             return;
         }
-
-
         //server.getPlayerManager().getPlayer(bountyList.get(0).getUUID()).getEntityName(); GRABS FROM ONLINE PLAYERS ONLY, NOT FROM OFFLINE
         //server.getPlayerManager().getPlayer(bountyList.get(0).getUUID()).getGameProfile(); GRABS FROM ONLINE PLAYERS ONLY, NOT FROM OFFLINE
 
-        /*for(int i = 0; i < bountyList.size(); i++){
-            this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
-                    .setName(Text.literal(bountyList.get(i).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                    .hideFlags()
-                    .setSkullOwner(bountyList.get(i).getGameProfile(), server));
-
-        }*/
-
+        currFirstHead = currHead;
         for (int i = 10; i <= 44; i++) {
             if(i == 17 || i == 26 || i == 35 || i == 44){
                 i += 1;
@@ -112,10 +120,48 @@ public class BountyBoardGUI extends SimpleGui {
             }else {
                 this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
                         .setName(Text.literal(bountyList.get(currHead).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                        .addLoreLine(getLoreValueAmount(bountyList.get(currHead).getBountyValue()))
+                        .addLoreLine(getLoreOnlineState(bountyList.get(currHead).getPlayerName()))
                         .hideFlags()
                         .setSkullOwner(bountyList.get(currHead).getGameProfile(), server));
             }
             currHead++;
         }
+        nextFirstHead = currHead+1;
+    }
+
+    private void setPageButton(){
+        this.setSlot(49, new GuiElementBuilder()
+                .setItem(Items.PLAYER_HEAD)
+                .setName(Text.literal("Page: " + currPage + " of " + maxPage).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .hideFlags()
+                .setSkullOwner(PlayerHeads.INFO));
+    }
+
+    public Text getLoreValueAmount(int amount){
+        MutableText amountText = Text.literal("");
+
+        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .append(Text.literal(amount + " Diamond(s)").formatted(Formatting.YELLOW));
+
+        return amountText;
+    }
+
+    public Text getLoreOnlineState(String name){
+        String[] onlinePlayers = server.getPlayerNames();
+        MutableText onlineText = Text.literal("");
+
+        for (String player : onlinePlayers) {
+            if(player.equals(name)){
+                onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                        .append(Text.literal("Yes").formatted(Formatting.GREEN));
+                return onlineText;
+            }
+        }
+
+        onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .append(Text.literal("No").formatted(Formatting.RED));
+
+        return onlineText;
     }
 }

@@ -12,11 +12,11 @@ public class BountyManager {
 
     public static void setBounty(UUID bounty, boolean setBounty, int value, GameProfile gameProfile, String playerName) {
         if(BountyDataManager.getBountyData(bounty) == null){
-            BountyDataManager.setBountyData(bounty, new BountyData(bounty, setBounty, false, value, gameProfile, playerName));
+            BountyDataManager.setBountyData(bounty, new BountyData(bounty, setBounty, BountyDataManager.getBountyData(bounty).getHasReward(), value, BountyDataManager.getBountyData(bounty).getRewardValue(), gameProfile, playerName));
             return;
         }
         BountyDataManager.getBountyData(bounty).setHasBounty(setBounty);
-        BountyDataManager.getBountyData(bounty).setValue(value);
+        BountyDataManager.getBountyData(bounty).setBountyValue(value);
     }
 
 
@@ -32,7 +32,7 @@ public class BountyManager {
         if(BountyDataManager.getBountyData(bounty) == null){
             return 0;
         }
-        return BountyDataManager.getBountyData(bounty).getValue();
+        return BountyDataManager.getBountyData(bounty).getBountyValue();
     }
 
 

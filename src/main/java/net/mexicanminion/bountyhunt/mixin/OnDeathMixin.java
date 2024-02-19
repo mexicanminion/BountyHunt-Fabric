@@ -2,6 +2,7 @@ package net.mexicanminion.bountyhunt.mixin;
 
 import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.RewardManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,9 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(ServerPlayerEntity.class)
-public class OnDeathMixin {
+public abstract class OnDeathMixin {
 
     @Shadow @Final public MinecraftServer server;
+
+    @Shadow public abstract void attack(Entity target);
 
     /**
      * INJECTION TO onDeath IN MINECRAFT CODE
@@ -56,9 +59,11 @@ public class OnDeathMixin {
         }
         //check if the player who died had a bounty
         if(BountyManager.getBounty(target.getUuid())){
+            ServerPlayerEntity attacker = (ServerPlayerEntity) target.getAttacker();
+            ServerPlayerEntity fallen = target;
             //if they did, give the bounty to the player who killed them (SET REWARD, REMOVE BOUNTY AND CURRENCY)
-            RewardManager.setReward(target.getAttacker().getUuid(), true, BountyManager.getBountyValue(target.getUuid()), target.getGameProfile(), target.getEntityName());
-            BountyManager.setBounty(target.getUuid(), false, 0, null, null);//TODO marker just incase this breaks something, you know
+            RewardManager.setReward(attacker.getUuid(), true, BountyManager.getBountyValue(fallen.getUuid()), attacker.getGameProfile(), attacker.getEntityName());
+            BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getEntityName());//TODO marker just incase this breaks something, you know
             //CurrencyManager.emptyCurrency(target.getUuid());
             target.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
             target.sendMessage(Text.of("You have been cleared of your burden"), false);
