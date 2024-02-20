@@ -16,14 +16,17 @@ A server side mod that allows you to add a bounty system to your server using di
 ### **Features**
 - Set A bounty on someone using diamonds
 - All players online will see a bounty when it gets set
-- A Bounty board to see who all hase bounties (in the work)
+- A Bounty board to see who all has bounties 
 
 ### **Commands**
 - /setbounty {player} - Allows the player to set a bounty with diamonds via a GUI
 - /claimbounty - Allows the player to claim a bounty with diamonds via a GUI
+- /bountyboard - Allows the player to see all the bounties that are currently active
+- /helpbounty - Shows all the commands for Bounty Hunt
 
 ### **How To Use**
 1. To set a bounty on a player, that player needs to be online. Once they are simple type /setbounty {player}
 2. Once a player has a bounty on them, simply hunt them down and bring them to 0 hearts. Once they are dead you will be notified to claim the reward
 3. Once you have a reward, simply type /claimbounty
 4. Make sure to have enough inventory space to claim all the diamonds or they will be spit out on the floor
+5. To see all the bounties that are currently active, type /bountyboard
