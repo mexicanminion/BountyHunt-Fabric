@@ -45,6 +45,10 @@ dependencies {
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	modImplementation include("eu.pb4:sgui:1.2.2+1.20")
+
+	modImplementation include('com.electronwill.night-config:json:3.6.0')
+
+
 }
 
 processResources {

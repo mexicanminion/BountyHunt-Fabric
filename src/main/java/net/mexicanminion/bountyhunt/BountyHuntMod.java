@@ -1,18 +1,19 @@
 package net.mexicanminion.bountyhunt;
 
+import com.electronwill.nightconfig.core.file.FileConfig;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
-import net.mexicanminion.bountyhunt.managers.BountyManager;
-import net.mexicanminion.bountyhunt.managers.RewardManager;
 import net.mexicanminion.bountyhunt.util.Register;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 
 public class BountyHuntMod implements ModInitializer {
@@ -20,6 +21,8 @@ public class BountyHuntMod implements ModInitializer {
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger("bountyhunt");
+	public static FileConfig config;
+	static String bountyPath = Paths.get("", "bountyhunt").toString();
 
 	// Register the server shutdown event
 	static {
@@ -40,13 +43,30 @@ public class BountyHuntMod implements ModInitializer {
 
 		LOGGER.info("BountyHunt is initializing!");
 
-		String path = Paths.get("", "bountyhunt").toString();
+		// Load the config file
+		try {
+			boolean exists = (new File(bountyPath,"bountyConfig.json")).exists();
+			if(exists){
+				readJSON();
+				Item test = Item.byRawId(config.get("itemIngot"));
+				LOGGER.info(test.toString());
+			}
+			else{
+				config = FileConfig.of(new File(bountyPath,"bountyConfig.json"));
+				config.load();
+				config.set("itemIngot", Registries.ITEM.getRawId(Items.DIAMOND_BLOCK));
+				//config.set("itemBlock", Registries.ITEM.getEntry(Items.DIAMOND_BLOCK).getKey());
+			}
+		} catch (FileNotFoundException e) {
+			LOGGER.info("BountyHunt: Config file not found. Creating a new one.");
+			LOGGER.info(bountyPath);
+		}
 
 		// Create the directory for data files if it doesn't exist
 		try {
-			boolean exists = (new File(path)).exists();
+			boolean exists = (new File(bountyPath)).exists();
 			if (!exists) {
-				new File(path).mkdir();
+				new File(bountyPath).mkdir();
 			}
 			// Load the currency, bounty, and reward files
 
@@ -56,7 +76,7 @@ public class BountyHuntMod implements ModInitializer {
 
 		}
 		catch (Exception e) {
-			if((new File(path)).exists()){
+			if((new File(bountyPath)).exists()){
 				LOGGER.info("Created `bountyhunt` directory.");
 			}else{
 				e.printStackTrace();
@@ -78,7 +98,25 @@ public class BountyHuntMod implements ModInitializer {
 		BountyDataManager bountyDataManager = new BountyDataManager();
 		bountyDataManager.saveBountyDataFile(LOGGER);
 
+		try {
+			writeJSON();
+		} catch (IOException e) {
+			LOGGER.info("BountyHunt: Error saving config file.");
+		}
+
 		LOGGER.info("BountyHunt has been shut down!");
+	}
+
+	private static void writeJSON() throws IOException {
+		config.save();
+		config.close();
+
+	}
+
+	private void readJSON() throws FileNotFoundException {
+		config = FileConfig.of(new File(bountyPath,"bountyConfig.json"));// For now, the configuration is empty. We need to read its content:
+		config.load(); // Reads the file and populates the config
+		config.load();
 	}
 
 }
