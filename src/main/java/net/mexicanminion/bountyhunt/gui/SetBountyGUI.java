@@ -15,6 +15,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import static net.mexicanminion.bountyhunt.BountyHuntMod.config;
+
 public class SetBountyGUI extends SimpleGui {
 
     public int amount = 0;
@@ -22,6 +24,11 @@ public class SetBountyGUI extends SimpleGui {
     public boolean enteringBlocks = false;
     public ServerCommandSource contextServer;
     public ServerPlayerEntity target;
+
+    private Item itemIngot = Item.byRawId(config.get("itemIngot"));
+    private Item itemBlock = Item.byRawId(config.get("itemBlock"));
+    private String itemIngotName = itemIngot.getName().getString();
+    private String itemBlockName = itemBlock.getName().getString();
     /**
      * Constructs a new simple container gui for the supplied player.
      *
@@ -43,9 +50,10 @@ public class SetBountyGUI extends SimpleGui {
         }
 
         this.setSlot(13, new GuiElementBuilder()
-                .setItem(Items.DIAMOND)
+                .setItem(itemIngot)
                 .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .addLoreLine(Text.literal("Click to switch between diamonds and diamond blocks").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                .addLoreLine(Text.literal(itemIngotName + " and " + itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                 .hideFlags()
                 .setCallback(((index, clickType, action) -> {purchaseType(false);})));
 
@@ -53,7 +61,7 @@ public class SetBountyGUI extends SimpleGui {
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " diamonds?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
 
         this.setSlot(50, new GuiElementBuilder()
@@ -100,29 +108,31 @@ public class SetBountyGUI extends SimpleGui {
         }
 
         if (enteringBlocks){
-            this.setSlot(13, new GuiElementBuilder(Items.DIAMOND_BLOCK)
+            this.setSlot(13, new GuiElementBuilder(itemBlock)
                     .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                    .addLoreLine(Text.literal("Click to switch between diamonds and diamond blocks").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                    .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                    .addLoreLine(Text.literal(itemIngotName + " and " + itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                     .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
-            validateAmount(29, Items.DIAMOND_BLOCK,1, false);
-            validateAmount(30, Items.DIAMOND_BLOCK,2, false);
-            validateAmount(31, Items.DIAMOND_BLOCK,10, false);
-            validateAmount(32, Items.DIAMOND_BLOCK,32, false);
-            validateAmount(33, Items.DIAMOND_BLOCK,64, false);
+            validateAmount(29, itemBlock,1, false);
+            validateAmount(30, itemBlock,2, false);
+            validateAmount(31, itemBlock,10, false);
+            validateAmount(32, itemBlock,32, false);
+            validateAmount(33, itemBlock,64, false);
         }
 
         else {
-            this.setSlot(13, new GuiElementBuilder(Items.DIAMOND)
+            this.setSlot(13, new GuiElementBuilder(itemIngot)
                     .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                    .addLoreLine(Text.literal("Click to switch between diamonds and diamond blocks").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                    .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                    .addLoreLine(Text.literal(itemIngotName + " and " + itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                     .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
-            validateAmount(29, Items.DIAMOND,1, false);
-            validateAmount(30, Items.DIAMOND,2, false);
-            validateAmount(31, Items.DIAMOND,10, false);
-            validateAmount(32, Items.DIAMOND,32, false);
-            validateAmount(33, Items.DIAMOND,64, false);
+            validateAmount(29, itemIngot,1, false);
+            validateAmount(30, itemIngot,2, false);
+            validateAmount(31, itemIngot,10, false);
+            validateAmount(32, itemIngot,32, false);
+            validateAmount(33, itemIngot,64, false);
         }
 
 
@@ -164,24 +174,21 @@ public class SetBountyGUI extends SimpleGui {
     }
 
     public void setDiamonds(int dAmount){
+        //TODO: Changed code here, bookmark just incase
         if(enteringBlocks){
             //dAmount *= 9;
-            if(removeItemFromInventory(player, Items.DIAMOND_BLOCK, dAmount)){
-                //player.sendMessage(Text.of("You have added " + dAmount + " diamond blocks to " + player.getDisplayName().getString() + "'s bounty"), false);
-            } else {
+            if (!removeItemFromInventory(player, itemBlock, dAmount)) {
                 player.sendMessage(Text.of("You do not have enough diamond blocks to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);
             }
         }else {
-            if(removeItemFromInventory(player, Items.DIAMOND, dAmount)){
-                //player.sendMessage(Text.of("You have added " + dAmount + " diamonds to " + player.getDisplayName().getString() + "'s bounty"), false);
-            } else {
+            if (!removeItemFromInventory(player, itemIngot, dAmount)) {
                 player.sendMessage(Text.of("You do not have enough diamonds to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
             }
         }
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " diamonds?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
     }
 
@@ -196,7 +203,7 @@ public class SetBountyGUI extends SimpleGui {
     public boolean removeItemFromInventory (ServerPlayerEntity player, Item itemToRemove, int quantity){
         int i = 0;
         if(player.getInventory().count(itemToRemove) >= quantity) {
-            if(itemToRemove.equals(Items.DIAMOND)){
+            if(itemToRemove.equals(itemIngot)){
                 amount += quantity;
             } else {
                 amount += quantity * 9;
@@ -235,9 +242,9 @@ public class SetBountyGUI extends SimpleGui {
         if(!isPlayerDone){
             for(int i = 0; i < amount; i++){
                 if(player.getInventory().getEmptySlot() == -1){
-                    player.dropItem(new ItemStack(Items.DIAMOND, 1), true);
+                    player.dropItem(new ItemStack(itemIngot, 1), true);
                 }else {
-                    player.getInventory().insertStack(new ItemStack(Items.DIAMOND, 1));
+                    player.getInventory().insertStack(new ItemStack(itemIngot, 1));
                 }
             }
         }
