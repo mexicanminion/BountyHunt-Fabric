@@ -3,6 +3,7 @@ package net.mexicanminion.bountyhunt.gui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.RewardManager;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -11,9 +12,16 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
+import static net.mexicanminion.bountyhunt.BountyHuntMod.config;
+
 public class ClaimBountyGUI extends SimpleGui {
 
     int dAmount = RewardManager.getReward(this.player.getUuid());
+
+    private Item itemIngot = Item.byRawId(config.get("itemIngot"));
+    private Item itemBlock = Item.byRawId(config.get("itemBlock"));
+    private String itemIngotName = itemIngot.getName().getString();
+    private String itemBlockName = itemBlock.getName().getString();
 
     /**
      * Constructs a new simple container gui for the supplied player.
@@ -35,7 +43,7 @@ public class ClaimBountyGUI extends SimpleGui {
         }
 
         this.setSlot(3, new GuiElementBuilder(Items.LIME_CONCRETE)
-                .setName(Text.literal("Reward: " + dAmount + " diamonds!").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Reward: " + dAmount + " " + itemIngotName + "(s)!").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .addLoreLine(Text.literal("Make sure you have enough inventory space!").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                 .hideFlags()
                 .setCallback(((index, clickType, action) -> {addDiamondsToPlayer();})));
@@ -108,7 +116,7 @@ public class ClaimBountyGUI extends SimpleGui {
                         if (stackAmount == 0){
                             break;
                         }else {
-                            this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, 64));
+                            this.setSlot(j, new GuiElementBuilder(itemIngot, 64));
                             stackAmount--;
                         }
                     }
@@ -120,7 +128,7 @@ public class ClaimBountyGUI extends SimpleGui {
                             //if there are no more stacks to add then break
                             break;
                         }else {
-                            this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, 64));
+                            this.setSlot(j, new GuiElementBuilder(itemIngot, 64));
                             stackAmount--;
                         }
                     }
@@ -139,11 +147,11 @@ public class ClaimBountyGUI extends SimpleGui {
                         }
                         //if there is only one stack left then add the remainder (this should not happen in this case)
                         else if(stackAmount == 1){
-                            this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, dRemainder));
+                            this.setSlot(j, new GuiElementBuilder(itemIngot, dRemainder));
                             break;
                         }else {
                             //add the stacks and decrement the stackAmount
-                            this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, 64));
+                            this.setSlot(j, new GuiElementBuilder(itemIngot, 64));
                             stackAmount--;
                         }
                     }
@@ -156,11 +164,11 @@ public class ClaimBountyGUI extends SimpleGui {
                         }
                         //if there is only one stack left then add the remainder, then break
                         else if(stackAmount == 1){
-                            this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, dRemainder));
+                            this.setSlot(j, new GuiElementBuilder(itemIngot, dRemainder));
                             break;
                         }else {
                             //add the stacks and decrement the stackAmount
-                            this.setSlot(j, new GuiElementBuilder(Items.DIAMOND, 64));
+                            this.setSlot(j, new GuiElementBuilder(itemIngot, 64));
                             stackAmount--;
                         }
                     }
@@ -205,18 +213,18 @@ public class ClaimBountyGUI extends SimpleGui {
             if(player.getInventory().getEmptySlot() != -1){
                 //if there is only one stack left then add the remainder
                 if(stackAmount == 1 && dRemainder != 0){
-                    player.getInventory().setStack(player.getInventory().getEmptySlot(), new ItemStack(Items.DIAMOND, dRemainder));
+                    player.getInventory().setStack(player.getInventory().getEmptySlot(), new ItemStack(itemIngot, dRemainder));
                 } else {
-                    player.getInventory().setStack(player.getInventory().getEmptySlot(), new ItemStack(Items.DIAMOND, 64));
+                    player.getInventory().setStack(player.getInventory().getEmptySlot(), new ItemStack(itemIngot, 64));
                 }
                 //decrement the stackAmount
                 stackAmount--;
             } else {
                 //if there is no empty slot then drop the diamonds
                 if(stackAmount == 1 && dRemainder != 0){
-                    player.dropItem(new ItemStack(Items.DIAMOND, dRemainder), true);
+                    player.dropItem(new ItemStack(itemIngot, dRemainder), true);
                 } else {
-                    player.dropItem(new ItemStack(Items.DIAMOND, 64), true);
+                    player.dropItem(new ItemStack(itemIngot, 64), true);
                 }
                 //decrement the stackAmount
                 stackAmount--;

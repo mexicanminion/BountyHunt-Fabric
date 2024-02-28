@@ -61,7 +61,7 @@ public class SetBountyGUI extends SimpleGui {
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
 
         this.setSlot(50, new GuiElementBuilder()
@@ -178,17 +178,17 @@ public class SetBountyGUI extends SimpleGui {
         if(enteringBlocks){
             //dAmount *= 9;
             if (!removeItemFromInventory(player, itemBlock, dAmount)) {
-                player.sendMessage(Text.of("You do not have enough diamond blocks to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);
+                player.sendMessage(Text.of("You do not have enough "+ itemBlockName +"s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);
             }
         }else {
             if (!removeItemFromInventory(player, itemIngot, dAmount)) {
-                player.sendMessage(Text.of("You do not have enough diamonds to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
+                player.sendMessage(Text.of("You do not have enough " + itemIngotName + "s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
             }
         }
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
     }
 

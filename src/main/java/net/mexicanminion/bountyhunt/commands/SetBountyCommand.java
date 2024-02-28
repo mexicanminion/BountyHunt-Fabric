@@ -5,8 +5,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.mexicanminion.bountyhunt.gui.SetBountyGUI;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
-import net.mexicanminion.bountyhunt.managers.BountyManager;
-import net.mexicanminion.bountyhunt.managers.CurrencyManager;
 import net.mexicanminion.bountyhunt.util.BountyData;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
