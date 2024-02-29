@@ -4,6 +4,7 @@ import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
 import net.mexicanminion.bountyhunt.util.BountyData;
+import net.mexicanminion.bountyhunt.util.CommonMethods;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -21,11 +22,6 @@ import static net.mexicanminion.bountyhunt.BountyHuntMod.config;
 public class BountyBoardGUI extends SimpleGui {
 
     public MinecraftServer server;
-
-    private Item itemIngot = Item.byRawId(config.get("itemIngot"));
-    private Item itemBlock = Item.byRawId(config.get("itemBlock"));
-    private String itemIngotName = itemIngot.getName().getString();
-    private String itemBlockName = itemBlock.getName().getString();
 
     int currPage = 1;
     int maxPage;
@@ -149,7 +145,7 @@ public class BountyBoardGUI extends SimpleGui {
         MutableText amountText = Text.literal("");
 
         amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true)))
-                .append(Text.literal(amount + " " + itemIngotName +"(s)").formatted(Formatting.YELLOW));
+                .append(Text.literal(amount + " " + CommonMethods.itemIngotName +"(s)").formatted(Formatting.YELLOW));
 
         return amountText;
     }

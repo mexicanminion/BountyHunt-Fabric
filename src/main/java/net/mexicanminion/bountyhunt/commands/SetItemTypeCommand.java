@@ -2,7 +2,6 @@ package net.mexicanminion.bountyhunt.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.ItemStackArgument;
@@ -26,10 +25,33 @@ public class SetItemTypeCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(CommandManager.literal("bountyItemType")
             .requires(source -> source.hasPermissionLevel(2))
-            .then(argument("ingot", ItemStackArgumentType.itemStack(commandRegistryAccess))
-                .then(argument("block", ItemStackArgumentType.itemStack(commandRegistryAccess))
-                    .executes(context -> setItemType(context, ItemStackArgumentType.getItemStackArgument(context, "ingot"), ItemStackArgumentType.getItemStackArgument(context, "block"), context.getSource()))
-                )
+            .then(CommandManager.literal("diamond")
+                    .executes(context -> setItemType(context, Items.DIAMOND, Items.DIAMOND_BLOCK))
+            )
+            .then(CommandManager.literal("iron")
+                    .executes(context -> setItemType(context, Items.IRON_INGOT, Items.IRON_BLOCK))
+            )
+            .then(CommandManager.literal("gold")
+                    .executes(context -> setItemType(context, Items.GOLD_INGOT, Items.GOLD_BLOCK))
+            )
+            .then(CommandManager.literal("emerald")
+                    .executes(context -> setItemType(context, Items.EMERALD, Items.EMERALD_BLOCK))
+            )
+            .then(CommandManager.literal("lapis")
+                    .executes(context -> setItemType(context, Items.LAPIS_LAZULI, Items.LAPIS_BLOCK))
+            )
+            .then(CommandManager.literal("copper")
+                    .executes(context -> setItemType(context, Items.COPPER_INGOT, Items.COPPER_BLOCK))
+            )
+            .then(CommandManager.literal("netherite")
+                    .executes(context -> setItemType(context, Items.NETHERITE_INGOT, Items.NETHERITE_BLOCK))
+            )
+            .then(CommandManager.literal("custom")
+                    .then(argument("ingot", ItemStackArgumentType.itemStack(commandRegistryAccess))
+                            .then(argument("block", ItemStackArgumentType.itemStack(commandRegistryAccess))
+                                    .executes(context -> setItemType(context, ItemStackArgumentType.getItemStackArgument(context, "ingot"), ItemStackArgumentType.getItemStackArgument(context, "block")))
+                            )
+                    )
             )
             .then(CommandManager.literal("confirm")
                     .executes(SetItemTypeCommand::hardConfirm)
@@ -39,7 +61,36 @@ public class SetItemTypeCommand {
         //registers the command setbounty with the perameter player then calls the setBounty method
     }
 
-    public static int setItemType(CommandContext<ServerCommandSource> context, ItemStackArgument ingot, ItemStackArgument block, ServerCommandSource contextServer) throws CommandSyntaxException {
+    public static int setItemType(CommandContext<ServerCommandSource> context, Item ingot, Item block) {
+        // Gets the source of the command assigns it to a ServerPlayerEntity object
+        final ServerCommandSource source = context.getSource();
+        final ServerPlayerEntity sender = source.getPlayer();
+
+        // Checks if the sender is null, is so its from console; disallow
+        if (sender == null) {
+            source.sendFeedback(() -> Text.literal("You must be a player to use this command!"), false);
+            return 0;
+        }
+        confirmed = false;
+        if(!BountyDataManager.getBountyData().isEmpty()){
+            source.sendFeedback(() -> Text.literal("There are bounties currently active! You can't change the item right now!"), false);
+            source.sendFeedback(() -> Text.literal("To force the change type /bountyItemType confirm"), false);
+            confirmed = true;
+            itemIngot = ingot;
+            itemBlock = block;
+            return 0;
+        }
+
+        config.set("itemIngot", Registries.ITEM.getRawId(ingot));
+        config.set("itemBlock", Registries.ITEM.getRawId(block));
+        config.save();
+
+        source.sendFeedback(() -> Text.literal("Currency has been changed!! Notify your server members so they can stay in the know!"), true);
+
+        return 0;
+    }
+
+    public static int setItemType(CommandContext<ServerCommandSource> context, ItemStackArgument ingot, ItemStackArgument block) {
         // Gets the source of the command assigns it to a ServerPlayerEntity object
         final ServerCommandSource source = context.getSource();
         final ServerPlayerEntity sender = source.getPlayer();

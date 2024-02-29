@@ -3,6 +3,7 @@ package net.mexicanminion.bountyhunt.gui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.BountyManager;
+import net.mexicanminion.bountyhunt.util.CommonMethods;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,10 +26,6 @@ public class SetBountyGUI extends SimpleGui {
     public ServerCommandSource contextServer;
     public ServerPlayerEntity target;
 
-    private Item itemIngot = Item.byRawId(config.get("itemIngot"));
-    private Item itemBlock = Item.byRawId(config.get("itemBlock"));
-    private String itemIngotName = itemIngot.getName().getString();
-    private String itemBlockName = itemBlock.getName().getString();
     /**
      * Constructs a new simple container gui for the supplied player.
      *
@@ -50,10 +47,10 @@ public class SetBountyGUI extends SimpleGui {
         }
 
         this.setSlot(13, new GuiElementBuilder()
-                .setItem(itemIngot)
+                .setItem(CommonMethods.itemIngot)
                 .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                .addLoreLine(Text.literal(itemIngotName + " and " + itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                .addLoreLine(Text.literal(CommonMethods.itemIngotName + " and " + CommonMethods.itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                 .hideFlags()
                 .setCallback(((index, clickType, action) -> {purchaseType(false);})));
 
@@ -61,7 +58,7 @@ public class SetBountyGUI extends SimpleGui {
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Confirm with " + amount + " "+CommonMethods.itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
 
         this.setSlot(50, new GuiElementBuilder()
@@ -86,10 +83,16 @@ public class SetBountyGUI extends SimpleGui {
         BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getEntityName());
 
         //send the title and subtitle to everyone on the server
-        for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
-            players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
-            players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount + " diamond(s)").formatted(Formatting.YELLOW)));
+        if(amount < (int)config.get("announceAmount")){
+            for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
+                players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
+                players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount +  " " + CommonMethods.itemIngotName + "(s)").formatted(Formatting.YELLOW)));
+            }
+        }else {
+            player.sendMessage(Text.of("Bounty set on " + target.getEntityName() + " for the amount of " + amount + " " + CommonMethods.itemIngotName + "(s)"), false);
+            target.sendMessage(Text.of("A bounty has been set on you for the amount of " + amount + " diamond(s)"), false);
         }
+
         isPlayerDone = true;
         this.close();
 
@@ -108,31 +111,31 @@ public class SetBountyGUI extends SimpleGui {
         }
 
         if (enteringBlocks){
-            this.setSlot(13, new GuiElementBuilder(itemBlock)
+            this.setSlot(13, new GuiElementBuilder(CommonMethods.itemBlock)
                     .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                     .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                    .addLoreLine(Text.literal(itemIngotName + " and " + itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                    .addLoreLine(Text.literal(CommonMethods.itemIngotName + " and " + CommonMethods.itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                     .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
-            validateAmount(29, itemBlock,1, false);
-            validateAmount(30, itemBlock,2, false);
-            validateAmount(31, itemBlock,10, false);
-            validateAmount(32, itemBlock,32, false);
-            validateAmount(33, itemBlock,64, false);
+            validateAmount(29, CommonMethods.itemBlock,1, false);
+            validateAmount(30, CommonMethods.itemBlock,2, false);
+            validateAmount(31, CommonMethods.itemBlock,10, false);
+            validateAmount(32, CommonMethods.itemBlock,32, false);
+            validateAmount(33, CommonMethods.itemBlock,64, false);
         }
 
         else {
-            this.setSlot(13, new GuiElementBuilder(itemIngot)
+            this.setSlot(13, new GuiElementBuilder(CommonMethods.itemIngot)
                     .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                     .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                    .addLoreLine(Text.literal(itemIngotName + " and " + itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                    .addLoreLine(Text.literal(CommonMethods.itemIngotName + " and " + CommonMethods.itemBlockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
                     .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
 
-            validateAmount(29, itemIngot,1, false);
-            validateAmount(30, itemIngot,2, false);
-            validateAmount(31, itemIngot,10, false);
-            validateAmount(32, itemIngot,32, false);
-            validateAmount(33, itemIngot,64, false);
+            validateAmount(29, CommonMethods.itemIngot,1, false);
+            validateAmount(30, CommonMethods.itemIngot,2, false);
+            validateAmount(31, CommonMethods.itemIngot,10, false);
+            validateAmount(32, CommonMethods.itemIngot,32, false);
+            validateAmount(33, CommonMethods.itemIngot,64, false);
         }
 
 
@@ -177,18 +180,18 @@ public class SetBountyGUI extends SimpleGui {
         //TODO: Changed code here, bookmark just incase
         if(enteringBlocks){
             //dAmount *= 9;
-            if (!removeItemFromInventory(player, itemBlock, dAmount)) {
-                player.sendMessage(Text.of("You do not have enough "+ itemBlockName +"s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);
+            if (!removeItemFromInventory(player, CommonMethods.itemBlock, dAmount)) {
+                player.sendMessage(Text.of("You do not have enough "+ CommonMethods.itemBlockName +"s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);
             }
         }else {
-            if (!removeItemFromInventory(player, itemIngot, dAmount)) {
-                player.sendMessage(Text.of("You do not have enough " + itemIngotName + "s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
+            if (!removeItemFromInventory(player, CommonMethods.itemIngot, dAmount)) {
+                player.sendMessage(Text.of("You do not have enough " + CommonMethods.itemIngotName + "s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), false);
             }
         }
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " "+itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Confirm with " + amount + " "+CommonMethods.itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
     }
 
@@ -203,7 +206,7 @@ public class SetBountyGUI extends SimpleGui {
     public boolean removeItemFromInventory (ServerPlayerEntity player, Item itemToRemove, int quantity){
         int i = 0;
         if(player.getInventory().count(itemToRemove) >= quantity) {
-            if(itemToRemove.equals(itemIngot)){
+            if(itemToRemove.equals(CommonMethods.itemIngot)){
                 amount += quantity;
             } else {
                 amount += quantity * 9;
@@ -242,9 +245,9 @@ public class SetBountyGUI extends SimpleGui {
         if(!isPlayerDone){
             for(int i = 0; i < amount; i++){
                 if(player.getInventory().getEmptySlot() == -1){
-                    player.dropItem(new ItemStack(itemIngot, 1), true);
+                    player.dropItem(new ItemStack(CommonMethods.itemIngot, 1), true);
                 }else {
-                    player.getInventory().insertStack(new ItemStack(itemIngot, 1));
+                    player.getInventory().insertStack(new ItemStack(CommonMethods.itemIngot, 1));
                 }
             }
         }

@@ -98,8 +98,10 @@ public class BountyHuntMod implements ModInitializer {
 		else{
 			config = FileConfig.of(new File(bountyPath,"bountyConfig.json"));
 			config.load();
+
 			config.set("itemIngot", Registries.ITEM.getRawId(Items.DIAMOND));
 			config.set("itemBlock", Registries.ITEM.getRawId(Items.DIAMOND_BLOCK));
+			config.set("announceAmount", 576); //1 stack of blocks
 			LOGGER.info("Created config file.");
 		}
 	}
