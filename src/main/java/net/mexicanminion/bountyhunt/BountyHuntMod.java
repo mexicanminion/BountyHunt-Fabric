@@ -99,9 +99,7 @@ public class BountyHuntMod implements ModInitializer {
 			config = FileConfig.of(new File(bountyPath,"bountyConfig.json"));
 			config.load();
 
-			config.set("itemIngot", Registries.ITEM.getRawId(Items.DIAMOND));
-			config.set("itemBlock", Registries.ITEM.getRawId(Items.DIAMOND_BLOCK));
-			config.set("announceAmount", 576); //1 stack of blocks
+			initConfigValues();
 			LOGGER.info("Created config file.");
 		}
 	}
@@ -119,6 +117,14 @@ public class BountyHuntMod implements ModInitializer {
 		if(config.get("itemIngot") == null){
 			config.load();
 		}
+	}
+
+	public static void initConfigValues() {
+		config.set("itemIngot", Registries.ITEM.getRawId(Items.DIAMOND));
+		config.set("itemBlock", Registries.ITEM.getRawId(Items.DIAMOND_BLOCK));
+		config.set("ingotToBlockAmount", 9);
+		config.set("onlyIngot", false);
+		config.set("announceAmount", 576); //1 stack of blocks
 	}
 
 }
