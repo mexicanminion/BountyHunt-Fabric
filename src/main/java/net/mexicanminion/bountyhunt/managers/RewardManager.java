@@ -3,7 +3,6 @@ package net.mexicanminion.bountyhunt.managers;
 import com.mojang.authlib.GameProfile;
 import net.mexicanminion.bountyhunt.util.BountyData;
 
-import java.io.*;
 import java.util.UUID;
 
 public class RewardManager {
