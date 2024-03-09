@@ -22,7 +22,7 @@ public class RewardManager {
 
     public static int getReward(UUID bounty) {
         if(BountyDataManager.getBountyData(bounty) == null || !BountyDataManager.getBountyData(bounty).getHasReward()){
-            return -1;
+            return 0;
         }
         return BountyDataManager.getBountyData(bounty).getRewardValue();
     }

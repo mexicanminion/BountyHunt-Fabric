@@ -51,7 +51,7 @@ This is the default config file for Bounty Hunt
 {
   "itemIngot": 764,
   "ingotToBlockAmount": 9,
-  "announceAmount": 50,
+  "announceAmount": 576,
   "onlyIngot": false,
   "itemBlock": 77
 }
