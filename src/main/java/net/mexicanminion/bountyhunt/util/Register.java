@@ -13,7 +13,7 @@ public class Register {
         CommandRegistrationCallback.EVENT.register(ClaimBountyCommand::register);
         CommandRegistrationCallback.EVENT.register(BountyBoardCommand::register);
         CommandRegistrationCallback.EVENT.register(SetItemTypeCommand::register);
-        CommandRegistrationCallback.EVENT.register(SetItemTypeCommand::register);
+        CommandRegistrationCallback.EVENT.register(SetAnnouncementCommand::register);
         CommandRegistrationCallback.EVENT.register(HelpBounty::register);
     }
 }

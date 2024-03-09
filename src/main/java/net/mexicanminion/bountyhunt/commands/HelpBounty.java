@@ -28,6 +28,14 @@ public class HelpBounty {
         source.sendFeedback(()-> Text.literal("/bountyboard: See all bounties"), false);
         source.sendFeedback(()-> Text.literal("/helpbounty: See list of Bounty Hunt commands"), false);
 
+        if(sender.hasPermissionLevel(3)){
+            source.sendFeedback(()-> Text.literal("/bountyitemtype {item}: Set the item type for bounties"), false);
+            source.sendFeedback(()-> Text.literal("/bountyItemType custom {ingot}: Set custom item type for bounties, ingot only"), false);
+            source.sendFeedback(()-> Text.literal("/bountyItemType custom <ingot> <block> <ingotToBlockAmount>: Set custom item type for bounties"), false);
+            source.sendFeedback(()-> Text.literal("/bountyItemType confirm: confirm currency change if needed"), false);
+            source.sendFeedback(()-> Text.literal("/bountyannouncement {amount}: Set the announcement amount for bounties"), false);
+        }
+
         return 0;
     }
 }

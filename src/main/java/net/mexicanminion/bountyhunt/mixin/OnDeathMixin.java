@@ -2,6 +2,7 @@ package net.mexicanminion.bountyhunt.mixin;
 
 import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.RewardManager;
+import net.mexicanminion.bountyhunt.util.CommonMethods;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.MinecraftServer;
@@ -62,16 +63,19 @@ public abstract class OnDeathMixin {
             ServerPlayerEntity attacker = (ServerPlayerEntity) target.getAttacker();
             ServerPlayerEntity fallen = target;
             //if they did, give the bounty to the player who killed them (SET REWARD, REMOVE BOUNTY AND CURRENCY)
-            RewardManager.setReward(attacker.getUuid(), true, BountyManager.getBountyValue(fallen.getUuid()), attacker.getGameProfile(), attacker.getEntityName());
+            int rewardAmount = BountyManager.getBountyValue(fallen.getUuid()) + RewardManager.getReward(attacker.getUuid());
+            RewardManager.setReward(attacker.getUuid(), true, rewardAmount, attacker.getGameProfile(), attacker.getEntityName());
             BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getEntityName());//TODO marker just incase this breaks something, you know
             //CurrencyManager.emptyCurrency(target.getUuid());
             target.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
             target.sendMessage(Text.of("You have been cleared of your burden"), false);
-            for (ServerPlayerEntity players : server.getPlayerManager().getPlayerList()) {
-                if ((players == target) || (players == target.getAttacker())) {
-                    continue;
+            if(RewardManager.getReward(attacker.getUuid()) >= CommonMethods.announceAmount){
+                for (ServerPlayerEntity players : server.getPlayerManager().getPlayerList()) {
+                    if ((players == target) || (players == target.getAttacker())) {
+                        continue;
+                    }
+                    players.sendMessage(Text.of("The bounty on " + target.getEntityName() + " has been claimed!"), false);
                 }
-                players.sendMessage(Text.of("The bounty on " + target.getEntityName() + " has been claimed!"), false);
             }
         }
     }

@@ -120,6 +120,7 @@ public class BountyHuntMod implements ModInitializer {
 	}
 
 	public static void initConfigValues() {
+		//TODO: for future updated to config, add a check to see if the value is already set, if not, set it
 		config.set("itemIngot", Registries.ITEM.getRawId(Items.DIAMOND));
 		config.set("itemBlock", Registries.ITEM.getRawId(Items.DIAMOND_BLOCK));
 		config.set("ingotToBlockAmount", 9);

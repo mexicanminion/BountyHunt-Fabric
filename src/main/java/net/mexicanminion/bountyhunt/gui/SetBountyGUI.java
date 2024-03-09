@@ -165,7 +165,6 @@ public class SetBountyGUI extends SimpleGui {
     public void setDiamonds(int dAmount){
         //TODO: Changed code here, bookmark just incase
         if(enteringBlocks){
-            //dAmount *= 9;
             if (!removeItemFromInventory(player, CommonMethods.itemBlock, dAmount)) {
                 player.sendMessage(Text.of("You do not have enough "+ CommonMethods.itemBlockName +"s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);
             }
@@ -195,7 +194,7 @@ public class SetBountyGUI extends SimpleGui {
             if(itemToRemove.equals(CommonMethods.itemIngot)){
                 amount += quantity;
             } else {
-                amount += quantity * 9;
+                amount += quantity * CommonMethods.ingotToBlockAmount;
             }
             while(quantity > 0){
                 if(player.getInventory().getStack(i).getItem().equals(itemToRemove)){
