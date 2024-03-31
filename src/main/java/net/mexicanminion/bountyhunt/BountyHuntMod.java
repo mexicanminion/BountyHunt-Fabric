@@ -41,8 +41,7 @@ public class BountyHuntMod implements ModInitializer {
 
 		LOGGER.info("BountyHunt is initializing!");
 
-		// Load the config file
-		loadConfig();
+
 
 		// Create the directory for data files if it doesn't exist
 		try {
@@ -66,6 +65,8 @@ public class BountyHuntMod implements ModInitializer {
 			}
 		}
 
+		// Load the config file
+		loadConfig();
 
 		// Register the commands
 		Register.register();
@@ -98,8 +99,8 @@ public class BountyHuntMod implements ModInitializer {
 		else{
 			config = FileConfig.of(new File(bountyPath,"bountyConfig.json"));
 			config.load();
-
 			initConfigValues();
+			config.save();
 			LOGGER.info("Created config file.");
 		}
 	}
