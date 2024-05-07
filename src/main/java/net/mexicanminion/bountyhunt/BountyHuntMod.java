@@ -40,9 +40,7 @@ public class BountyHuntMod implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("BountyHunt is initializing!");
-
-
-
+		// Test commit
 		// Create the directory for data files if it doesn't exist
 		try {
 			boolean exists = (new File(bountyPath)).exists();
