@@ -70,4 +70,29 @@ public class BountyData implements java.io.Serializable {
         this.rewardValue = value;
     }
 
+    public String[] getSaveData(){
+        String hasBountyString;
+        String hasRewardString;
+        if(hasBounty){
+            hasBountyString = "true";
+        }else {
+            hasBountyString = "false";
+        }
+        if(hasReward){
+            hasRewardString = "true";
+        }else {
+            hasRewardString = "false";
+        }
+
+        String[] data = {uuid.toString(),
+                hasBountyString,
+                hasRewardString,
+                String.valueOf(bountyValue),
+                String.valueOf(rewardValue),
+                GPid.toString(),
+                GPname,
+                playerName};
+        return data;
+    }
+
 }

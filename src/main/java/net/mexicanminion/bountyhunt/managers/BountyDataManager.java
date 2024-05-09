@@ -11,14 +11,17 @@ import java.util.zip.GZIPOutputStream;
 
 public class BountyDataManager {
 
-    //public static List<BountyData> bountyData;
     public static HashMap<UUID,BountyData> bountyData = new HashMap<>();
+
+    Stack<BountyData> bountyData2 = new Stack<>();
 
     public void saveBountyDataFile(Logger logger) throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
-
         ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+
+        int bountyCapacity = bountyData2.capacity();
+        String[][] allDataArray = new String[bountyCapacity][8];
 
         try{
             output.writeObject(bountyData);
@@ -29,6 +32,8 @@ public class BountyDataManager {
             e.printStackTrace();
             logger.info("Failed to save BountyHunt files.");
         }
+
+
     }
 
     /**
@@ -90,5 +95,47 @@ public class BountyDataManager {
 
         return activeBountyAmount;
     }
+
+    /*
+    public void saveBountyDataFile(Logger logger) throws FileNotFoundException, IOException {
+        File bountyDir = Paths.get("", "bountyhunt").toFile();
+        File file = new File(bountyDir, "bountyData.dat");
+
+        ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+
+        try{
+            output.writeObject(bountyData);
+            output.flush();
+            output.close();
+            logger.info("Saved BountyHunt files.");
+        } catch(IOException e){
+            e.printStackTrace();
+            logger.info("Failed to save BountyHunt files.");
+        }
+
+        int amountOfB = bountyData2.capacity();
+    }
+
+    public void loadBountyDataFile() throws FileNotFoundException, IOException, ClassNotFoundException {
+        File bountyDir = Paths.get("", "bountyhunt").toFile();
+        File file = new File(bountyDir, "bountyData.dat");
+
+        if(file != null){
+            ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+            Object readObject = input.readObject();
+            input.close();
+
+            if(!(readObject instanceof HashMap)){
+                throw new IOException("Data is not a HashMap");
+            }
+
+            bountyData = (HashMap<UUID, BountyData>) readObject;
+            for(UUID key : bountyData.keySet()){
+                bountyData.put(key, bountyData.get(key));
+            }
+
+        }
+    }
+    */
 
 }
