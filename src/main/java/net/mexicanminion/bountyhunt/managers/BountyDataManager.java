@@ -12,19 +12,25 @@ import java.util.zip.GZIPOutputStream;
 public class BountyDataManager {
 
     public static HashMap<UUID,BountyData> bountyData = new HashMap<>();
+    public static Stack<BountyData> bountyData2 = new Stack<>();
 
-    Stack<BountyData> bountyData2 = new Stack<>();
+    int bountyCapacity = bountyData2.capacity();
 
     public void saveBountyDataFile(Logger logger) throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
         ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
-        int bountyCapacity = bountyData2.capacity();
         String[][] allDataArray = new String[bountyCapacity][8];
 
+        int currCount = 0;
+        for(BountyData data : bountyData2){
+            allDataArray[currCount] = data.getSaveData();
+            currCount++;
+        }
+
         try{
-            output.writeObject(bountyData);
+            output.writeObject(allDataArray);
             output.flush();
             output.close();
             logger.info("Saved BountyHunt files.");
@@ -52,13 +58,16 @@ public class BountyDataManager {
             Object readObject = input.readObject();
             input.close();
 
-            if(!(readObject instanceof HashMap)){
-                throw new IOException("Data is not a HashMap");
+            if(!(readObject instanceof String[][])){
+                throw new IOException("Data is not a String[][]");
             }
 
-            bountyData = (HashMap<UUID, BountyData>) readObject;
-            for(UUID key : bountyData.keySet()){
-                bountyData.put(key, bountyData.get(key));
+            String[][] allDataArray;
+            bountyData2.empty();
+
+            allDataArray = (String[][]) readObject;
+            for(int i = 0; i < allDataArray.length; i++){
+                bountyData2.add(new BountyData(allDataArray[i]));
             }
 
         }
