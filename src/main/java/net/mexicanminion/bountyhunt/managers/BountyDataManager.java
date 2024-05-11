@@ -38,8 +38,6 @@ public class BountyDataManager {
             e.printStackTrace();
             logger.info("Failed to save BountyHunt files.");
         }
-
-
     }
 
     /**
@@ -105,8 +103,7 @@ public class BountyDataManager {
         return activeBountyAmount;
     }
 
-    /*
-    public void saveBountyDataFile(Logger logger) throws FileNotFoundException, IOException {
+    public void saveBountyDataFileOLD(Logger logger) throws IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
 
@@ -125,7 +122,7 @@ public class BountyDataManager {
         int amountOfB = bountyData2.capacity();
     }
 
-    public void loadBountyDataFile() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public void loadBountyDataFileOLD() throws IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
 
@@ -142,9 +139,7 @@ public class BountyDataManager {
             for(UUID key : bountyData.keySet()){
                 bountyData.put(key, bountyData.get(key));
             }
-
         }
     }
-    */
 
 }

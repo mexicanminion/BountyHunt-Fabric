@@ -22,6 +22,8 @@ public class BountyHuntMod implements ModInitializer {
 	public static FileConfig config;
 	static String bountyPath = Paths.get("", "bountyhunt").toString();
 
+	static private int fileVer = 1;
+
 	// Register the server shutdown event
 	static {
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
@@ -50,7 +52,26 @@ public class BountyHuntMod implements ModInitializer {
 			// Load the currency, bounty, and reward files
 
 			BountyDataManager bountyDataManager = new BountyDataManager();
-			bountyDataManager.loadBountyDataFile();
+
+			// Load the config file
+			loadConfig();
+			int verConfirm = checkConfig();
+
+			switch (verConfirm){
+				case -1: // needs to throw error
+					//throw error
+					break;
+				case 1:  // no number found
+					bountyDataManager.loadBountyDataFileOLD();
+					break;
+				case 2:  // update config num
+
+					break;
+				case 3:  // ver number matches
+					bountyDataManager.loadBountyDataFile();
+					break;
+			}
+
 			LOGGER.info("Loaded BountyHunt files.");
 
 		}
@@ -62,9 +83,6 @@ public class BountyHuntMod implements ModInitializer {
 				LOGGER.info("Error loading BountyHunt files.");
 			}
 		}
-
-		// Load the config file
-		loadConfig();
 
 		// Register the commands
 		Register.register();
@@ -103,6 +121,21 @@ public class BountyHuntMod implements ModInitializer {
 		}
 	}
 
+	private int checkConfig() {
+		if(config.get("BHVersion") == null){			  // no number found
+			config.set("BHVersion", fileVer); //The File System version
+			return 1;
+		}else if((int)config.get("BHVersion") < fileVer){ // update config num
+			config.set("BHVersion", fileVer);
+			return 2;
+		}else if((int)config.get("BHVersion") > fileVer){ // needs to throw error
+			return -1;
+		}else{ 											  // ver number matches
+			return 3;
+		}
+
+	}
+
 
 	private static void writeJSON() throws IOException {
 		config.save();
@@ -125,6 +158,7 @@ public class BountyHuntMod implements ModInitializer {
 		config.set("ingotToBlockAmount", 9);
 		config.set("onlyIngot", false);
 		config.set("announceAmount", 576); //1 stack of blocks
+		config.set("BHVersion", fileVer); //The File System version
 	}
 
 }
