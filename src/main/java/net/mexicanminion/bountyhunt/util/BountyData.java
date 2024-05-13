@@ -30,6 +30,17 @@ public class BountyData implements java.io.Serializable {
         this.playerName = playerName;
     }
 
+    public BountyData(){
+        this.uuid = UUID.randomUUID();
+        this.hasBounty = true;
+        this.hasReward = true;
+        this.bountyValue = 0;
+        this.rewardValue = 0;
+        this.GPid = UUID.randomUUID();
+        this.GPname = "THIS IS A NULL PLAYER";
+        this.playerName = "THIS IS A NULL PLAYER";
+    }
+
     public UUID getUUID(){
         return uuid;
     }

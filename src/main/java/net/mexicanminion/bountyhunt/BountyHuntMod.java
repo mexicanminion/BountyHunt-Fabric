@@ -59,13 +59,12 @@ public class BountyHuntMod implements ModInitializer {
 
 			switch (verConfirm){
 				case -1: // needs to throw error
-					//throw error
-					break;
+					throw new Error("Please update to the latest BountyHunt Version! This mod does not support downgrading!");
 				case 1:  // no number found
 					bountyDataManager.loadBountyDataFileOLD();
 					break;
-				case 2:  // update config num
-
+				case 2:  // updated config num
+					bountyDataManager.updateAndLoadBDFile();
 					break;
 				case 3:  // ver number matches
 					bountyDataManager.loadBountyDataFile();
@@ -83,27 +82,11 @@ public class BountyHuntMod implements ModInitializer {
 				LOGGER.info("Error loading BountyHunt files.");
 			}
 		}
-
 		// Register the commands
 		Register.register();
 		LOGGER.info("Registered commands.");
 
 		LOGGER.info("BountyHunt has been initialized!");
-	}
-
-	// Save the currency, bounty, and reward files when the server is shutting down
-	public static void onServerShutdown() throws IOException {
-		LOGGER.info("BountyHunt is shutting down!");
-		BountyDataManager bountyDataManager = new BountyDataManager();
-		bountyDataManager.saveBountyDataFile(LOGGER);
-
-		try {
-			writeJSON();
-		} catch (IOException e) {
-			LOGGER.info("Error saving config file.");
-		}
-
-		LOGGER.info("BountyHunt has been shut down!");
 	}
 
 	private void loadConfig() {
@@ -136,7 +119,6 @@ public class BountyHuntMod implements ModInitializer {
 
 	}
 
-
 	private static void writeJSON() throws IOException {
 		config.save();
 		config.close();
@@ -159,6 +141,21 @@ public class BountyHuntMod implements ModInitializer {
 		config.set("onlyIngot", false);
 		config.set("announceAmount", 576); //1 stack of blocks
 		config.set("BHVersion", fileVer); //The File System version
+	}
+
+	// Save the currency, bounty, and reward files when the server is shutting down
+	public static void onServerShutdown() throws IOException {
+		LOGGER.info("BountyHunt is shutting down!");
+		BountyDataManager bountyDataManager = new BountyDataManager();
+		bountyDataManager.saveBountyDataFile(LOGGER);
+
+		try {
+			writeJSON();
+		} catch (IOException e) {
+			LOGGER.info("Error saving config file.");
+		}
+
+		LOGGER.info("BountyHunt has been shut down!");
 	}
 
 }

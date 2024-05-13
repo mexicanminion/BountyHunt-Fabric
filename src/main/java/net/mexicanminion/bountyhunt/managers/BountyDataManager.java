@@ -43,11 +43,10 @@ public class BountyDataManager {
     /**
      * loadBountyDataFile()
      * Description: Load the bounty file
-     * @throws FileNotFoundException
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void loadBountyDataFile() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public void loadBountyDataFile() throws IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
 
@@ -64,6 +63,34 @@ public class BountyDataManager {
             bountyData2.empty();
 
             allDataArray = (String[][]) readObject;
+            for(int i = 0; i < allDataArray.length; i++){
+                bountyData2.add(new BountyData(allDataArray[i]));
+            }
+
+        }
+    }
+
+    public void updateAndLoadBDFile() throws IOException, ClassNotFoundException {
+        File bountyDir = Paths.get("", "bountyhunt").toFile();
+        File file = new File(bountyDir, "bountyData.dat");
+
+        if(file != null){
+            ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+            Object readObject = input.readObject();
+            input.close();
+
+            if(!(readObject instanceof String[][])){
+                throw new IOException("Data is not a String[][]");
+            }
+
+            String[][] allDataArray;
+            bountyData2.empty();
+            allDataArray = (String[][]) readObject;
+
+            int arrayDiff = new BountyData().getSaveData().length - allDataArray[0].length;
+
+            //TODO: Move data to new array with null values for the newly added array slots; pass it in to bountydata2
+
             for(int i = 0; i < allDataArray.length; i++){
                 bountyData2.add(new BountyData(allDataArray[i]));
             }
