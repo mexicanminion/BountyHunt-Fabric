@@ -10,7 +10,7 @@ public class RewardManager {
 
     public static void setReward(UUID rewarder, boolean hasReward, int value, GameProfile gameProfile, String playerName) {
         if(BountyDataManager.getBountyData(rewarder) == null){
-            BountyDataManager.setBountyData(rewarder, new BountyData(rewarder, false, hasReward, 0, value, gameProfile, playerName));
+            BountyDataManager.setBountyData(new BountyData(rewarder, false, hasReward, 0, value, gameProfile, playerName));
             return;
         }
         BountyDataManager.getBountyData(rewarder).setHasReward(hasReward);

@@ -5,7 +5,6 @@ import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
 import net.mexicanminion.bountyhunt.util.BountyData;
 import net.mexicanminion.bountyhunt.util.CommonMethods;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.MinecraftServer;
@@ -17,7 +16,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
-import static net.mexicanminion.bountyhunt.BountyHuntMod.config;
 
 public class BountyBoardGUI extends SimpleGui {
 
