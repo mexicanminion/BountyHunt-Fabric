@@ -68,7 +68,9 @@ public class BountyDataManager {
             logger.info(Arrays.deepToString(allDataArray));
 
             for(int i = 0; i < allDataArray.length; i++){
-                bountyData.add(new BountyData(allDataArray[i]));
+                if(allDataArray[i][0] != null){
+                    bountyData.add(new BountyData(allDataArray[i]));
+                }
             }
 
         }
@@ -100,7 +102,9 @@ public class BountyDataManager {
             }
 
             for(int r = 0; r < allDataArray.length; r++){
-                bountyData.add(new BountyData(ArrayUtils.addAll(allDataArray[r], temp)));
+                if(allDataArray[r][0] != null){
+                    bountyData.add(new BountyData(ArrayUtils.addAll(allDataArray[r], temp)));
+                }
             }
 
         }
