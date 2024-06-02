@@ -49,7 +49,7 @@ public class BountyDataManager {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void loadBountyDataFile() throws IOException, ClassNotFoundException {
+    public void loadBountyDataFile(Logger logger) throws IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
 
@@ -62,10 +62,11 @@ public class BountyDataManager {
                 throw new IOException("Data is not a String[][]");
             }
 
-            String[][] allDataArray;
             bountyData.empty();
 
-            allDataArray = (String[][]) readObject;
+            String[][] allDataArray = (String[][]) readObject;
+            logger.info(Arrays.deepToString(allDataArray));
+
             for(int i = 0; i < allDataArray.length; i++){
                 bountyData.add(new BountyData(allDataArray[i]));
             }

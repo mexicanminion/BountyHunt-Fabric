@@ -71,7 +71,7 @@ public class BountyHuntMod implements ModInitializer {
 					break;
 				case 3:  // ver number matches
 					LOGGER.info("Files up to date");
-					bountyDataManager.loadBountyDataFile();
+					bountyDataManager.loadBountyDataFile(LOGGER);
 					break;
 			}
 
@@ -79,6 +79,7 @@ public class BountyHuntMod implements ModInitializer {
 
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			if((new File(bountyPath)).exists()){
 				LOGGER.info("Created `bountyhunt` directory.");
 			}else{
