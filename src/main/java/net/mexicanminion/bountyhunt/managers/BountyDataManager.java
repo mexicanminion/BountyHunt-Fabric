@@ -158,11 +158,12 @@ public class BountyDataManager {
         int amountOfB = bountyData.capacity();
     }*/
 
-    public void loadBountyDataFileOLD() throws IOException, ClassNotFoundException {
+    public void loadBountyDataFileOLD(Logger logger) throws IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
 
         if(file != null){
+            logger.info("Started Load Old Data");
             ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
             Object readObject = input.readObject();
             input.close();
@@ -171,8 +172,11 @@ public class BountyDataManager {
                 throw new IOException("Data is not a HashMap");
             }
 
+            logger.info("Read File");
+
             bountyData_OLD = (HashMap<UUID, BountyData_OLD>) readObject;
             for(UUID key : bountyData_OLD.keySet()){
+                logger.info("Transfer Start");
                 BountyData_OLD tempBD = bountyData_OLD.get(key);
 
                 int arrayDiff = new BountyData().getSaveData().length - 8;
@@ -206,7 +210,10 @@ public class BountyDataManager {
                         tempBD.getPlayerName()
                 };
 
+                logger.info(tempData.toString());
+
                 bountyData.add(new BountyData(ArrayUtils.addAll(tempData, tempNULL)));
+                logger.info("Transfer End");
             }
         }
     }

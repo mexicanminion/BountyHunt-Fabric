@@ -59,14 +59,18 @@ public class BountyHuntMod implements ModInitializer {
 
 			switch (verConfirm){
 				case -1: // needs to throw error
+					LOGGER.info("Error found!");
 					throw new Error("Please update to the latest BountyHunt Version! This mod does not support downgrading!");
 				case 1:  // no number found
-					bountyDataManager.loadBountyDataFileOLD();
+					LOGGER.info("Old File System found");
+					bountyDataManager.loadBountyDataFileOLD(LOGGER);
 					break;
 				case 2:  // updated config num
+					LOGGER.info("Updating files");
 					bountyDataManager.updateAndLoadBDFile();
 					break;
 				case 3:  // ver number matches
+					LOGGER.info("Files up to date");
 					bountyDataManager.loadBountyDataFile();
 					break;
 			}
