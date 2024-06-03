@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.mexicanminion.bountyhunt.gui.SetBountyGUI;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
-import net.mexicanminion.bountyhunt.util.BountyData;
+import net.mexicanminion.bountyhunt.util.BountyDataImproved;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -46,7 +46,7 @@ public class SetBountyCommand {
 
         // Checks if the target has a bounty, if so disallow
         if(BountyDataManager.getBountyData(target.getUuid()) == null) {
-            BountyDataManager.setBountyData(new BountyData(target.getUuid(), false, false, 0, 0, target.getGameProfile(), target.getEntityName()));
+            BountyDataManager.setBountyData(new BountyDataImproved(target.getUuid(), false, false, 0, 0, target.getGameProfile(), target.getEntityName()));
         }
 
         // Checks if the target has a bounty, if so disallow

@@ -1,7 +1,7 @@
 package net.mexicanminion.bountyhunt.managers;
 
 import com.mojang.authlib.GameProfile;
-import net.mexicanminion.bountyhunt.util.BountyData;
+import net.mexicanminion.bountyhunt.util.BountyDataImproved;
 
 import java.util.UUID;
 
@@ -10,7 +10,7 @@ public class RewardManager {
 
     public static void setReward(UUID rewarder, boolean hasReward, int value, GameProfile gameProfile, String playerName) {
         if(BountyDataManager.getBountyData(rewarder) == null){
-            BountyDataManager.setBountyData(new BountyData(rewarder, false, hasReward, 0, value, gameProfile, playerName));
+            BountyDataManager.setBountyData(new BountyDataImproved(rewarder, false, hasReward, 0, value, gameProfile, playerName));
             return;
         }
         BountyDataManager.getBountyData(rewarder).setHasReward(hasReward);

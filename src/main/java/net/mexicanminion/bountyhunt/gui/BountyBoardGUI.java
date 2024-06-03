@@ -3,7 +3,7 @@ package net.mexicanminion.bountyhunt.gui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
-import net.mexicanminion.bountyhunt.util.BountyData;
+import net.mexicanminion.bountyhunt.util.BountyDataImproved;
 import net.mexicanminion.bountyhunt.util.CommonMethods;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -97,7 +97,7 @@ public class BountyBoardGUI extends SimpleGui {
     }
 
     public void spawnHeads(){
-        List<BountyData> bountyList = BountyDataManager.getBountyData();
+        List<BountyDataImproved> bountyList = BountyDataManager.getBountyData();
 
         //check if bountyList empty
         if(bountyList.isEmpty()){

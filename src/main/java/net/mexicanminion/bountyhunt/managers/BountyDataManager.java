@@ -1,8 +1,8 @@
 package net.mexicanminion.bountyhunt.managers;
 
 import com.llamalad7.mixinextras.lib.apache.commons.ArrayUtils;
+import net.mexicanminion.bountyhunt.util.BountyDataImproved;
 import net.mexicanminion.bountyhunt.util.BountyData;
-import net.mexicanminion.bountyhunt.util.BountyData_OLD;
 import org.slf4j.Logger;
 
 import java.io.*;
@@ -13,8 +13,8 @@ import java.util.zip.GZIPOutputStream;
 
 public class BountyDataManager {
 
-    public static HashMap<UUID,BountyData_OLD> bountyData_OLD = new HashMap<>();
-    public static Stack<BountyData> bountyData = new Stack<>();
+    public static HashMap<UUID, BountyData> bountyData_OLD = new HashMap<>();
+    public static Stack<BountyDataImproved> bountyData = new Stack<>();
 
     int bountyCapacity = bountyData.capacity();
     int totalVarsStored = 8;
@@ -27,7 +27,7 @@ public class BountyDataManager {
         String[][] allDataArray = new String[bountyCapacity][totalVarsStored];
 
         int currCount = 0;
-        for(BountyData data : bountyData){
+        for(BountyDataImproved data : bountyData){
             allDataArray[currCount] = data.getSaveData();
             currCount++;
         }
@@ -69,7 +69,7 @@ public class BountyDataManager {
 
             for(int i = 0; i < allDataArray.length; i++){
                 if(allDataArray[i][0] != null){
-                    bountyData.add(new BountyData(allDataArray[i]));
+                    bountyData.add(new BountyDataImproved(allDataArray[i]));
                 }
             }
 
@@ -93,7 +93,7 @@ public class BountyDataManager {
             bountyData.empty();
             allDataArray = (String[][]) readObject;
 
-            int arrayDiff = new BountyData().getSaveData().length - allDataArray[0].length;
+            int arrayDiff = new BountyDataImproved().getSaveData().length - allDataArray[0].length;
             String[] temp = new String[arrayDiff];
 
             //fill temp array with null vales
@@ -103,19 +103,19 @@ public class BountyDataManager {
 
             for(int r = 0; r < allDataArray.length; r++){
                 if(allDataArray[r][0] != null){
-                    bountyData.add(new BountyData(ArrayUtils.addAll(allDataArray[r], temp)));
+                    bountyData.add(new BountyDataImproved(ArrayUtils.addAll(allDataArray[r], temp)));
                 }
             }
 
         }
     }
 
-    public static void setBountyData(BountyData playerData){
+    public static void setBountyData(BountyDataImproved playerData){
         bountyData.add(playerData);
     }
 
-    public static BountyData getBountyData(UUID player){
-        for (BountyData data:bountyData) {
+    public static BountyDataImproved getBountyData(UUID player){
+        for (BountyDataImproved data:bountyData) {
             if(data.getUUID() == player){
                 return data;
             }
@@ -123,9 +123,9 @@ public class BountyDataManager {
         return null;
     }
 
-    public static List<BountyData> getBountyData(){
-        List<BountyData> bountyList = new ArrayList<>();
-        for (BountyData data:bountyData) {
+    public static List<BountyDataImproved> getBountyData(){
+        List<BountyDataImproved> bountyList = new ArrayList<>();
+        for (BountyDataImproved data:bountyData) {
             if(data.getHasBounty()){
                 bountyList.add(data);
             }
@@ -135,7 +135,7 @@ public class BountyDataManager {
 
     public static int getActiveBountyAmount(){
         int activeBountyAmount = 0;
-        for (BountyData data:bountyData) {
+        for (BountyDataImproved data:bountyData) {
             if(data.getHasBounty()){
                 activeBountyAmount++;
             }
@@ -179,12 +179,12 @@ public class BountyDataManager {
 
             logger.info("Read File");
 
-            bountyData_OLD = (HashMap<UUID, BountyData_OLD>) readObject;
+            bountyData_OLD = (HashMap<UUID, BountyData>) readObject;
             for(UUID key : bountyData_OLD.keySet()){
                 logger.info("Transfer Start");
-                BountyData_OLD tempBD = bountyData_OLD.get(key);
+                BountyData tempBD = bountyData_OLD.get(key);
 
-                int arrayDiff = new BountyData().getSaveData().length - 8;
+                int arrayDiff = new BountyDataImproved().getSaveData().length - 8;
                 String[] tempNULL = new String[arrayDiff];
 
                 //fill temp array with null vales
@@ -217,7 +217,7 @@ public class BountyDataManager {
 
                 logger.info(tempData.toString());
 
-                bountyData.add(new BountyData(ArrayUtils.addAll(tempData, tempNULL)));
+                bountyData.add(new BountyDataImproved(ArrayUtils.addAll(tempData, tempNULL)));
                 logger.info("Transfer End");
             }
         }
