@@ -17,7 +17,7 @@ public class BountyDataManager {
     public static Stack<BountyDataImproved> bountyData = new Stack<>();
 
     int bountyCapacity = bountyData.capacity();
-    int totalVarsStored = 9;
+    int totalVarsStored = 10;
 
     public void saveBountyDataFile(Logger logger) throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();

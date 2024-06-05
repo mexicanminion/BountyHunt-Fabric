@@ -46,7 +46,7 @@ public class SetBountyCommand {
 
         // Checks if the target has an entry in the master list, if not it adds one
         if(BountyDataManager.getBountyData(target.getUuid()) == null) {
-            BountyDataManager.setBountyData(new BountyDataImproved(target.getUuid(), false, false, 0, 0, target.getGameProfile(), target.getEntityName(), null));
+            BountyDataManager.setBountyData(new BountyDataImproved(target.getUuid(), false, false, 0, 0, target.getGameProfile(), target.getEntityName(), target.getUuid()));
         }
 
         // Checks if the player has an entry in the master list, if not it adds one

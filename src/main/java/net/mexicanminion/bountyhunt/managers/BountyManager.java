@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public class BountyManager {
 
-    public static void setBounty(UUID bounty, boolean setBounty, int value, GameProfile gameProfile, String playerName) {
+    public static void setBounty(UUID bounty, boolean setBounty, int value, GameProfile gameProfile, String playerName, UUID bountier) {
         if(BountyDataManager.getBountyData(bounty) == null){
             //TODO: add the bountier UUID
-            BountyDataManager.setBountyData(new BountyDataImproved(bounty, setBounty, false, value, 0, gameProfile, playerName));
+            BountyDataManager.setBountyData(new BountyDataImproved(bounty, setBounty, false, value, 0, gameProfile, playerName, bountier));
             return;
         }
         BountyDataManager.getBountyData(bounty).setHasBounty(setBounty);
@@ -30,6 +30,10 @@ public class BountyManager {
             return false;
         }
         return BountyDataManager.getBountyData(bounty).getHasBounty();
+    }
+
+    public static BountyDataImproved getBountyData(UUID bounty) {
+        return BountyDataManager.getBountyData(bounty);
     }
 
     public static int getBountyValue(UUID bounty) {

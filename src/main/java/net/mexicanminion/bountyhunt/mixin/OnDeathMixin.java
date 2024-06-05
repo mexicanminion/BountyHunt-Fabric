@@ -1,5 +1,6 @@
 package net.mexicanminion.bountyhunt.mixin;
 
+import net.mexicanminion.bountyhunt.managers.BountyDataManager;
 import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.RewardManager;
 import net.mexicanminion.bountyhunt.util.CommonMethods;
@@ -66,8 +67,8 @@ public abstract class OnDeathMixin {
             int rewardAmount = BountyManager.getBountyValue(fallen.getUuid()) + RewardManager.getReward(attacker.getUuid());
 
             RewardManager.setReward(attacker.getUuid(), true, rewardAmount, attacker.getGameProfile(), attacker.getEntityName());
-            BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getEntityName());//TODO marker just incase this breaks something, you know
-            //BountyManager.removeFromBountyList();
+            BountyManager.removeFromBountyList(BountyDataManager.getBountyData(fallen.getUuid()).getBountier(), fallen.getUuid());
+            BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getEntityName(), null);//TODO marker just incase this breaks something, you know
 
             target.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
             target.sendMessage(Text.of("You have been cleared of your burden"), false);

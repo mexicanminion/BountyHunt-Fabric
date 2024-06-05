@@ -2,7 +2,9 @@ package net.mexicanminion.bountyhunt.util;
 
 import com.mojang.authlib.GameProfile;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.UUID;
 
 public class BountyDataImproved implements java.io.Serializable {
@@ -15,7 +17,7 @@ public class BountyDataImproved implements java.io.Serializable {
     UUID GPid;
     String GPname;
     String playerName;
-    List<UUID> createdBounties;
+    Stack<UUID> createdBounties;
     UUID bountier;
 
     public BountyDataImproved(String[] getData){
@@ -31,7 +33,7 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPid = gameProfile.getId();
         this.GPname = gameProfile.getName();
         this.playerName = playerName;
-        this.createdBounties.clear();
+        createdBounties = new Stack<UUID>();
         this.bountier = bountier;
     }
 
@@ -79,6 +81,10 @@ public class BountyDataImproved implements java.io.Serializable {
         return createdBounties;
     }
 
+    public UUID getBountier(){
+        return bountier;
+    }
+
     public void setHasBounty(boolean hasBounty){
         this.hasBounty = hasBounty;
     }
@@ -95,7 +101,7 @@ public class BountyDataImproved implements java.io.Serializable {
         this.rewardValue = value;
     }
 
-    public void setCreatedBounties (List<UUID> uuidList){
+    public void setCreatedBounties (Stack<UUID> uuidList){
         this.createdBounties = uuidList;
     }
 
