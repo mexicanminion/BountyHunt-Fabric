@@ -15,14 +15,15 @@ public class BountyManager {
         }
         BountyDataManager.getBountyData(bounty).setHasBounty(setBounty);
         BountyDataManager.getBountyData(bounty).setBountyValue(value);
+        BountyDataManager.getBountyData(bounty).setBountier(bountier);
     }
 
     public static void addToBountyList(UUID bountySet, UUID bountyHead) {
         BountyDataManager.getBountyData(bountySet).addToBountyList(bountyHead);
     }
 
-    public static void removeFromBountyList(UUID bountySet, UUID bountyHead) {
-        BountyDataManager.getBountyData(bountySet).removeFromBountyList(bountyHead);
+    public static boolean removeFromBountyList(UUID bountySet, UUID bountyHead) {
+        return BountyDataManager.getBountyData(bountySet).removeFromBountyList(bountyHead);
     }
 
     public static boolean getBounty(UUID bounty) {

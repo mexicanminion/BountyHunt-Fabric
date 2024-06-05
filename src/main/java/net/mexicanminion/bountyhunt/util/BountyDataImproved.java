@@ -17,7 +17,7 @@ public class BountyDataImproved implements java.io.Serializable {
     UUID GPid;
     String GPname;
     String playerName;
-    Stack<UUID> createdBounties;
+    ArrayList<UUID> createdBounties;
     UUID bountier;
 
     public BountyDataImproved(String[] getData){
@@ -33,7 +33,7 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPid = gameProfile.getId();
         this.GPname = gameProfile.getName();
         this.playerName = playerName;
-        createdBounties = new Stack<UUID>();
+        createdBounties = new ArrayList<UUID>();
         this.bountier = bountier;
     }
 
@@ -46,7 +46,7 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPid = UUID.randomUUID();
         this.GPname = "THIS IS A NULL PLAYER";
         this.playerName = "THIS IS A NULL PLAYER";
-        this.createdBounties.clear();
+        this.createdBounties = new ArrayList<UUID>();
     }
 
     public UUID getUUID(){
@@ -101,7 +101,11 @@ public class BountyDataImproved implements java.io.Serializable {
         this.rewardValue = value;
     }
 
-    public void setCreatedBounties (Stack<UUID> uuidList){
+    public void setBountier(UUID uuid){
+        this.bountier = uuid;
+    }
+
+    public void setCreatedBounties (ArrayList<UUID> uuidList){
         this.createdBounties = uuidList;
     }
 
@@ -110,7 +114,14 @@ public class BountyDataImproved implements java.io.Serializable {
     }
 
     public boolean removeFromBountyList(UUID placedBounty){
-        return createdBounties.remove(placedBounty);
+        for (int i = 0; i < createdBounties.size(); i++) {
+            UUID temp = createdBounties.get(i);
+            if(temp == placedBounty){
+                createdBounties.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public String[] getSaveData(){
