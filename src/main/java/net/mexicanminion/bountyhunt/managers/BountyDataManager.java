@@ -17,7 +17,7 @@ public class BountyDataManager {
     public static Stack<BountyDataImproved> bountyData = new Stack<>();
 
     int bountyCapacity = bountyData.capacity();
-    int totalVarsStored = 8;
+    int totalVarsStored = 9;
 
     public void saveBountyDataFile(Logger logger) throws FileNotFoundException, IOException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
@@ -184,7 +184,7 @@ public class BountyDataManager {
                 logger.info("Transfer Start");
                 BountyData tempBD = bountyData_OLD.get(key);
 
-                int arrayDiff = new BountyDataImproved().getSaveData().length - 8;
+                int arrayDiff = new BountyDataImproved().getSaveData().length - totalVarsStored;
                 String[] tempNULL = new String[arrayDiff];
 
                 //fill temp array with null vales
@@ -222,5 +222,4 @@ public class BountyDataManager {
             }
         }
     }
-
 }

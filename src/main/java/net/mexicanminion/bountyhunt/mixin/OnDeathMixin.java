@@ -64,9 +64,11 @@ public abstract class OnDeathMixin {
             ServerPlayerEntity fallen = target;
             //if they did, give the bounty to the player who killed them (SET REWARD, REMOVE BOUNTY AND CURRENCY)
             int rewardAmount = BountyManager.getBountyValue(fallen.getUuid()) + RewardManager.getReward(attacker.getUuid());
+
             RewardManager.setReward(attacker.getUuid(), true, rewardAmount, attacker.getGameProfile(), attacker.getEntityName());
             BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getEntityName());//TODO marker just incase this breaks something, you know
-            //CurrencyManager.emptyCurrency(target.getUuid());
+            //BountyManager.removeFromBountyList();
+
             target.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
             target.sendMessage(Text.of("You have been cleared of your burden"), false);
             if(RewardManager.getReward(attacker.getUuid()) >= CommonMethods.announceAmount){

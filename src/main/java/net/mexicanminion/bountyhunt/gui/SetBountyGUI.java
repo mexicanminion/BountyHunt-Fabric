@@ -73,6 +73,8 @@ public class SetBountyGUI extends SimpleGui {
         //update the currency and set the bounty
         //CurrencyManager.setCurrency(target.getUuid(), amount);
         BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getEntityName());
+        BountyManager.addToBountyList(player.getUuid(), target.getUuid());
+
 
         //send the title and subtitle to everyone on the server
         if(amount >= CommonMethods.announceAmount){
@@ -163,7 +165,6 @@ public class SetBountyGUI extends SimpleGui {
     }
 
     public void setDiamonds(int dAmount){
-        //TODO: Changed code here, bookmark just incase
         if(enteringBlocks){
             if (!removeItemFromInventory(player, CommonMethods.itemBlock, dAmount)) {
                 player.sendMessage(Text.of("You do not have enough "+ CommonMethods.itemBlockName +"s to add " + dAmount + " to " + player.getDisplayName().getString() + "'s bounty"), true);

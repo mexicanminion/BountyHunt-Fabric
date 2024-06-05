@@ -9,6 +9,7 @@ public class BountyManager {
 
     public static void setBounty(UUID bounty, boolean setBounty, int value, GameProfile gameProfile, String playerName) {
         if(BountyDataManager.getBountyData(bounty) == null){
+            //TODO: add the bountier UUID
             BountyDataManager.setBountyData(new BountyDataImproved(bounty, setBounty, false, value, 0, gameProfile, playerName));
             return;
         }
@@ -16,7 +17,13 @@ public class BountyManager {
         BountyDataManager.getBountyData(bounty).setBountyValue(value);
     }
 
+    public static void addToBountyList(UUID bountySet, UUID bountyHead) {
+        BountyDataManager.getBountyData(bountySet).addToBountyList(bountyHead);
+    }
 
+    public static void removeFromBountyList(UUID bountySet, UUID bountyHead) {
+        BountyDataManager.getBountyData(bountySet).removeFromBountyList(bountyHead);
+    }
 
     public static boolean getBounty(UUID bounty) {
         if(BountyDataManager.getBountyData(bounty) == null){

@@ -2,6 +2,7 @@ package net.mexicanminion.bountyhunt.util;
 
 import com.mojang.authlib.GameProfile;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BountyDataImproved implements java.io.Serializable {
@@ -14,12 +15,14 @@ public class BountyDataImproved implements java.io.Serializable {
     UUID GPid;
     String GPname;
     String playerName;
+    List<UUID> createdBounties;
+    UUID bountier;
 
     public BountyDataImproved(String[] getData){
         this.putSaveData(getData);
     }
 
-    public BountyDataImproved(UUID uuid, boolean hasBounty, boolean hasReward, int bountyValue, int rewardValue, GameProfile gameProfile, String playerName){
+    public BountyDataImproved(UUID uuid, boolean hasBounty, boolean hasReward, int bountyValue, int rewardValue, GameProfile gameProfile, String playerName, UUID bountier){
         this.uuid = uuid;
         this.hasBounty = hasBounty;
         this.hasReward = hasReward;
@@ -28,6 +31,8 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPid = gameProfile.getId();
         this.GPname = gameProfile.getName();
         this.playerName = playerName;
+        this.createdBounties.clear();
+        this.bountier = bountier;
     }
 
     public BountyDataImproved(){
@@ -39,6 +44,7 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPid = UUID.randomUUID();
         this.GPname = "THIS IS A NULL PLAYER";
         this.playerName = "THIS IS A NULL PLAYER";
+        this.createdBounties.clear();
     }
 
     public UUID getUUID(){
@@ -69,6 +75,10 @@ public class BountyDataImproved implements java.io.Serializable {
         return playerName;
     }
 
+    public List<UUID> getCreatedBounties(){
+        return createdBounties;
+    }
+
     public void setHasBounty(boolean hasBounty){
         this.hasBounty = hasBounty;
     }
@@ -85,9 +95,23 @@ public class BountyDataImproved implements java.io.Serializable {
         this.rewardValue = value;
     }
 
+    public void setCreatedBounties (List<UUID> uuidList){
+        this.createdBounties = uuidList;
+    }
+
+    public boolean addToBountyList(UUID placedBounty){
+        return createdBounties.add(placedBounty);
+    }
+
+    public boolean removeFromBountyList(UUID placedBounty){
+        return createdBounties.remove(placedBounty);
+    }
+
     public String[] getSaveData(){
         String hasBountyString;
         String hasRewardString;
+        String bountyListString = "";
+
         if(hasBounty){
             hasBountyString = "true";
         }else {
@@ -99,6 +123,10 @@ public class BountyDataImproved implements java.io.Serializable {
             hasRewardString = "false";
         }
 
+        for (UUID uuid: createdBounties){
+            bountyListString += (uuid.toString() + " ");
+        }
+
         String[] data = {uuid.toString(),
                 hasBountyString,
                 hasRewardString,
@@ -106,7 +134,8 @@ public class BountyDataImproved implements java.io.Serializable {
                 String.valueOf(rewardValue),
                 GPid.toString(),
                 GPname,
-                playerName};
+                playerName,
+                bountyListString};
         return data;
     }
 
@@ -127,6 +156,12 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPid = UUID.fromString(data[5]);
         this.GPname = data[6];
         this.playerName = data[7];
+
+        String[] uuidList = data[8].split(" ");
+        createdBounties.clear();
+        for (String uuid: uuidList) {
+            createdBounties.add(UUID.fromString(uuid));
+        }
     }
 
 }
