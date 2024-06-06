@@ -33,7 +33,7 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPid = gameProfile.getId();
         this.GPname = gameProfile.getName();
         this.playerName = playerName;
-        createdBounties = new ArrayList<UUID>();
+        this.createdBounties = new ArrayList<UUID>();
         this.bountier = bountier;
     }
 
@@ -47,6 +47,7 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPname = "THIS IS A NULL PLAYER";
         this.playerName = "THIS IS A NULL PLAYER";
         this.createdBounties = new ArrayList<UUID>();
+        this.bountier = UUID.randomUUID();
     }
 
     public UUID getUUID(){

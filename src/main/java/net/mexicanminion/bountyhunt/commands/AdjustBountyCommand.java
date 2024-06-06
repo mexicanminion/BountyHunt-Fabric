@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.mexicanminion.bountyhunt.gui.BountyBoardGUI;
 import net.mexicanminion.bountyhunt.gui.IncreaseBountyGUI;
+import net.mexicanminion.bountyhunt.managers.BountyDataManager;
+import net.mexicanminion.bountyhunt.util.BountyDataImproved;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -26,6 +28,11 @@ public class AdjustBountyCommand {
         if(sender == null) {
             source.sendFeedback(()-> Text.literal("You must be a player to use this command!"), false);
             return 0;
+        }
+
+        // Checks if the player has an entry in the master list, if not it adds one
+        if(BountyDataManager.getBountyData(sender.getUuid()) == null) {
+            BountyDataManager.setBountyData(new BountyDataImproved(sender.getUuid(), false, false, 0, 0, sender.getGameProfile(), sender.getEntityName(), null));
         }
 
         try {
