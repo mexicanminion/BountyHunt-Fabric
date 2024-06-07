@@ -9,7 +9,6 @@ public class BountyManager {
 
     public static void setBounty(UUID bounty, boolean setBounty, int value, GameProfile gameProfile, String playerName, UUID bountier) {
         if(BountyDataManager.getBountyData(bounty) == null){
-            //TODO: add the bountier UUID
             BountyDataManager.setBountyData(new BountyDataImproved(bounty, setBounty, false, value, 0, gameProfile, playerName, bountier));
             return;
         }

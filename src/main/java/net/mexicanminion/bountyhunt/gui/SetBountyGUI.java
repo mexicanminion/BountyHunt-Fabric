@@ -43,7 +43,6 @@ public class SetBountyGUI extends SimpleGui {
 
         if(isEditing){
             this.setTitle(Text.of("Edit Bounty"));
-            this.amount = BountyManager.getBountyValue(target.getUuid());
         }else{
             this.setTitle(Text.of("Set Bounty"));
         }
@@ -123,8 +122,8 @@ public class SetBountyGUI extends SimpleGui {
                             + "(s), Total value of " + totalValue +  " " + CommonMethods.itemIngotName + "(s)").formatted(Formatting.YELLOW)));
                 }
             }else {
-                player.sendMessage(Text.of("Bounty set on " + target.getEntityName() + " for the amount of " + amount + " " + CommonMethods.itemIngotName + "(s)"), false);
-                target.sendMessage(Text.of("A bounty has been set on you for the amount of " + amount + " diamond(s)"), false);
+                player.sendMessage(Text.of("Bounty adjusted on " + target.getEntityName() + " for the added amount of " + amount + " " + CommonMethods.itemIngotName + "(s), Total value of " + totalValue +  " " + CommonMethods.itemIngotName + "(s)" ), false);
+                target.sendMessage(Text.of("The bounty on you has increased by " + amount + " " + CommonMethods.itemIngotName + "(s) totaling " + totalValue +  " " + CommonMethods.itemIngotName + "(s)"), false);
             }
         }else{
             BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getEntityName(), player.getUuid());
@@ -283,7 +282,7 @@ public class SetBountyGUI extends SimpleGui {
     public void onClose() {
         //TODO: When adjusting amount and pressing escape, you get back the original amount of currency when you should not
         super.onClose();
-        if(!isPlayerDone){
+        if(!isPlayerDone && !isEditing){
             for(int i = 0; i < amount; i++){
                 if(player.getInventory().getEmptySlot() == -1){
                     player.dropItem(new ItemStack(CommonMethods.itemIngot, 1), true);
