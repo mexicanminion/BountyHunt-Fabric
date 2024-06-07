@@ -62,7 +62,7 @@ public class SetBountyCommand {
 
         // Opens the SetBountyGUI
         try {
-            SetBountyGUI bountyGUI = new SetBountyGUI(sender, false, contextServer, target);
+            SetBountyGUI bountyGUI = new SetBountyGUI(sender, false, contextServer, target, false);
             bountyGUI.open();
         } catch (Exception e) {
             e.printStackTrace();

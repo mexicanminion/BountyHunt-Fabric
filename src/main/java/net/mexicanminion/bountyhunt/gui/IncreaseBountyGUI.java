@@ -129,7 +129,7 @@ public class IncreaseBountyGUI extends SimpleGui {
             }else {
                 this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
                         .hideFlags()
-                        .setCallback(((index, clickType, action) -> openSetBountyGUI(setBountyList.get(currHead))))
+                        .setCallback(((index, clickType, action) -> openSetBountyGUI(setBountyList, index)))
                         .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                         .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
                         .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
@@ -148,9 +148,17 @@ public class IncreaseBountyGUI extends SimpleGui {
         return amountText;
     }
 
-    public void openSetBountyGUI (UUID target){
+    public void openSetBountyGUI (List<UUID> heads, int target){
+        if(target > 37){
+            target -= 6;
+        }else if(target > 27){
+            target -= 4;
+        }else if(target > 18){
+            target -= 2;
+        }
+        target -= 10;
         try {
-            SetBountyGUI bountyGUI = new SetBountyGUI(player, false, contextServer, server.getPlayerManager().getPlayer(target));
+            SetBountyGUI bountyGUI = new SetBountyGUI(player, false, contextServer, server.getPlayerManager().getPlayer(heads.get(target)), true);
             bountyGUI.open();
         } catch (Exception e) {
             e.printStackTrace();

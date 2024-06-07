@@ -21,6 +21,7 @@ public class SetBountyGUI extends SimpleGui {
     public int amount = 0;
     public boolean isPlayerDone = false;
     public boolean enteringBlocks = false;
+    public boolean isEditing;
     public ServerCommandSource contextServer;
     public ServerPlayerEntity target;
 
@@ -31,14 +32,21 @@ public class SetBountyGUI extends SimpleGui {
      * @param manipulatePlayerSlots if <code>true</code> the players inventory
      *                              will be treated as slots of this gui
      */
-    public SetBountyGUI(ServerPlayerEntity player, boolean manipulatePlayerSlots, ServerCommandSource contextServer, ServerPlayerEntity target) {
+    public SetBountyGUI(ServerPlayerEntity player, boolean manipulatePlayerSlots, ServerCommandSource contextServer, ServerPlayerEntity target, boolean isEditing) {
         super(ScreenHandlerType.GENERIC_9X6, player, manipulatePlayerSlots);
 
         this.setLockPlayerInventory(false);
-        this.setTitle(Text.of("Set Bounty"));
         this.reOpen = true;
         this.contextServer = contextServer;
         this.target = target;
+        this.isEditing = isEditing;
+
+        if(isEditing){
+            this.setTitle(Text.of("Edit Bounty"));
+            this.amount = BountyManager.getBountyValue(target.getUuid());
+        }else{
+            this.setTitle(Text.of("Set Bounty"));
+        }
 
         for(int i = 0; i < 54; i++){
             this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
@@ -53,11 +61,26 @@ public class SetBountyGUI extends SimpleGui {
                 .setName(Text.literal("Confirm with " + amount + " "+CommonMethods.itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
 
-        this.setSlot(50, new GuiElementBuilder()
-                .setItem(Items.BARRIER)
-                .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .setCallback(((index, clickType, action) -> this.close())));
+        if(isEditing){
+            this.setSlot(50, new GuiElementBuilder()
+                    .setItem(Items.BARRIER)
+                    .setName(Text.literal("Back/Cancel").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .setCallback(((index, clickType, action) -> {
+                        try {
+                            IncreaseBountyGUI increaseBountyGUI = new IncreaseBountyGUI(player, false, contextServer);
+                            increaseBountyGUI.open();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    })));
 
+        }else {
+            this.setSlot(50, new GuiElementBuilder()
+                    .setItem(Items.BARRIER)
+                    .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .setCallback(((index, clickType, action) -> this.close())));
+
+        }
     }
 
     /**
@@ -66,30 +89,61 @@ public class SetBountyGUI extends SimpleGui {
      *              Runs when the player clicks the confirm button
      */
     public void confirmDiamondsUpdate(){
-        if(amount == 0){
-            player.sendMessage(Text.of("You must add at least 1 diamond to set a bounty"), true);
-            return;
+        if(isEditing){
+            if(amount == BountyManager.getBountyValue(target.getUuid())){
+                player.sendMessage(Text.of("You must add at least 1 " + CommonMethods.itemIngotName + " to increase a bounty"), true);
+                return;
+            }
+        }else{
+            if(amount == 0){
+                player.sendMessage(Text.of("You must add at least 1 " + CommonMethods.itemIngotName + " to set a bounty"), true);
+                return;
+            }
         }
         //update the currency and set the bounty
         //CurrencyManager.setCurrency(target.getUuid(), amount);
-        BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getEntityName(), player.getUuid());
-        BountyManager.addToBountyList(player.getUuid(), target.getUuid());
 
+        if(isEditing){
+            int totalValue = BountyManager.getBountyValue(target.getUuid()) + amount;
+            int diffValue;
 
-        //send the title and subtitle to everyone on the server
-        if(amount >= CommonMethods.announceAmount){
-            for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
-                players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
-                players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount +  " " + CommonMethods.itemIngotName + "(s)").formatted(Formatting.YELLOW)));
+            if(BountyManager.getBountyValue(target.getUuid()) > amount){
+                diffValue = BountyManager.getBountyValue(target.getUuid()) - amount;
+            }else if(BountyManager.getBountyValue(target.getUuid()) < amount){
+                diffValue = amount - BountyManager.getBountyValue(target.getUuid());
+            }else{
+                diffValue = amount;
             }
-        }else {
-            player.sendMessage(Text.of("Bounty set on " + target.getEntityName() + " for the amount of " + amount + " " + CommonMethods.itemIngotName + "(s)"), false);
-            target.sendMessage(Text.of("A bounty has been set on you for the amount of " + amount + " diamond(s)"), false);
+            BountyManager.setBounty(target.getUuid(), true, totalValue, target.getGameProfile(), target.getEntityName(), player.getUuid());
+            //send the title and subtitle to everyone on the server
+            if(amount >= CommonMethods.announceAmount){
+                for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
+                    players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty increased on " + target.getEntityName()).formatted(Formatting.RED)));
+                    players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the added amount of " + diffValue +  " " + CommonMethods.itemIngotName
+                            + "(s), Total value of " + totalValue +  " " + CommonMethods.itemIngotName + "(s)").formatted(Formatting.YELLOW)));
+                }
+            }else {
+                player.sendMessage(Text.of("Bounty set on " + target.getEntityName() + " for the amount of " + amount + " " + CommonMethods.itemIngotName + "(s)"), false);
+                target.sendMessage(Text.of("A bounty has been set on you for the amount of " + amount + " diamond(s)"), false);
+            }
+        }else{
+            BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getEntityName(), player.getUuid());
+            BountyManager.addToBountyList(player.getUuid(), target.getUuid());
+
+            //send the title and subtitle to everyone on the server
+            if(amount >= CommonMethods.announceAmount){
+                for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
+                    players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
+                    players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount +  " " + CommonMethods.itemIngotName + "(s)").formatted(Formatting.YELLOW)));
+                }
+            }else {
+                player.sendMessage(Text.of("Bounty set on " + target.getEntityName() + " for the amount of " + amount + " " + CommonMethods.itemIngotName + "(s)"), false);
+                target.sendMessage(Text.of("A bounty has been set on you for the amount of " + amount + " diamond(s)"), false);
+            }
         }
 
         isPlayerDone = true;
         this.close();
-
     }
 
     /**
@@ -227,6 +281,7 @@ public class SetBountyGUI extends SimpleGui {
      */
     @Override
     public void onClose() {
+        //TODO: When adjusting amount and pressing escape, you get back the original amount of currency when you should not
         super.onClose();
         if(!isPlayerDone){
             for(int i = 0; i < amount; i++){
