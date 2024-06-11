@@ -66,7 +66,11 @@ public abstract class OnDeathMixin {
             //if they did, give the bounty to the player who killed them (SET REWARD, REMOVE BOUNTY AND CURRENCY)
             int rewardAmount = BountyManager.getBountyValue(fallen.getUuid()) + RewardManager.getReward(attacker.getUuid());
 
-            BountyManager.removeFromBountyList(BountyDataManager.getBountyData(fallen.getUuid()).getBountier(), fallen.getUuid());
+            if(BountyDataManager.getBountyData(fallen.getUuid()).getBountier() == null){
+
+            }else{
+                BountyManager.removeFromBountyList(BountyDataManager.getBountyData(fallen.getUuid()).getBountier(), fallen.getUuid());
+            }
             RewardManager.setReward(attacker.getUuid(), true, rewardAmount, attacker.getGameProfile(), attacker.getEntityName());
             BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getEntityName(), null);//TODO marker just incase this breaks something, you know
 

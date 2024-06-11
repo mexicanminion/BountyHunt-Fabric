@@ -183,17 +183,19 @@ public class BountyDataImproved implements java.io.Serializable {
         this.GPname = data[6];
         this.playerName = data[7];
 
-        String[] uuidList = data[8].split(" ");
         this.createdBounties = new ArrayList<UUID>();
-        for (String uuid: uuidList) {
-            if(uuid.equalsIgnoreCase(" ") || uuid.equalsIgnoreCase("")){
-                continue;
-            }else{
-                this.createdBounties.add(UUID.fromString(uuid));
+        if(data[8] != null){
+            String[] uuidList = data[8].split(" ");
+            for (String uuid: uuidList) {
+                if(uuid.equalsIgnoreCase(" ") || uuid.equalsIgnoreCase("")){
+                    continue;
+                }else{
+                    this.createdBounties.add(UUID.fromString(uuid));
+                }
             }
         }
 
-        if(data[9].equalsIgnoreCase("NA")){
+        if(data[9] == null || data[9].equalsIgnoreCase("NA")){
             this.bountier = null;
         }else{
             this.bountier = UUID.fromString(data[9]);
