@@ -127,12 +127,25 @@ public class IncreaseBountyGUI extends SimpleGui {
                 //empty slot
                 this.setSlot(i, new GuiElementBuilder(Items.AIR));
             }else {
-                this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
-                        .hideFlags()
-                        .setCallback(((index, clickType, action) -> openSetBountyGUI(setBountyList, index)))
-                        .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                        .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
-                        .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
+                if(getOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName())){
+                    this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
+                            .hideFlags()
+                            .setCallback(((index, clickType, action) -> openSetBountyGUI(setBountyList, index)))
+                            .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                            .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
+                            .addLoreLine(getLoreOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
+                            .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
+                }else{
+                    this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
+                            .hideFlags()
+                            .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                            .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
+                            .addLoreLine(getLoreOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
+                            .addLoreLine(Text.literal("You can't change the bounty").setStyle(Style.EMPTY.withItalic(true).withBold(true)).formatted(Formatting.RED))
+                            .addLoreLine(Text.literal("when the player is offline!").setStyle(Style.EMPTY.withItalic(true).withBold(true)).formatted(Formatting.RED))
+                            .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
+                }
+
             }
             currHead++;
         }
@@ -142,10 +155,37 @@ public class IncreaseBountyGUI extends SimpleGui {
     public Text getLoreValueAmount(int amount){
         MutableText amountText = Text.literal("");
 
-        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true)))
+        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .append(Text.literal(amount + " " + CommonMethods.itemIngotName +"(s)").formatted(Formatting.YELLOW));
 
         return amountText;
+    }
+
+    public Text getLoreOnlineState(String name){
+        String[] onlinePlayers = server.getPlayerNames();
+        MutableText onlineText = Text.literal("");
+
+        for (String player : onlinePlayers) {
+            if(player.equals(name)){
+                onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                        .append(Text.literal("Yes").formatted(Formatting.GREEN));
+                return onlineText;
+            }
+        }
+
+        onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .append(Text.literal("No").formatted(Formatting.RED));
+
+        return onlineText;
+    }
+
+    public boolean getOnlineState(String name){
+        for (String player : server.getPlayerNames()) {
+            if(player.equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void openSetBountyGUI (List<UUID> heads, int target){

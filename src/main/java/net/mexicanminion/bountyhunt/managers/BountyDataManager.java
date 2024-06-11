@@ -49,7 +49,7 @@ public class BountyDataManager {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void loadBountyDataFile(Logger logger) throws IOException, ClassNotFoundException {
+    public void loadBountyDataFile() throws IOException, ClassNotFoundException {
         File bountyDir = Paths.get("", "bountyhunt").toFile();
         File file = new File(bountyDir, "bountyData.dat");
 
@@ -65,7 +65,7 @@ public class BountyDataManager {
             bountyData.empty();
 
             String[][] allDataArray = (String[][]) readObject;
-            logger.info(Arrays.deepToString(allDataArray));
+            //logger.info(Arrays.deepToString(allDataArray));
 
             for(int i = 0; i < allDataArray.length; i++){
                 if(allDataArray[i][0] != null){
@@ -116,7 +116,7 @@ public class BountyDataManager {
 
     public static BountyDataImproved getBountyData(UUID player){
         for (BountyDataImproved data:bountyData) {
-            if(data.getUUID() == player){
+            if(data.getUUID().equals(player)){
                 return data;
             }
         }
@@ -184,14 +184,6 @@ public class BountyDataManager {
                 logger.info("Transfer Start");
                 BountyData tempBD = bountyData_OLD.get(key);
 
-                int arrayDiff = new BountyDataImproved().getSaveData().length - totalVarsStored;
-                String[] tempNULL = new String[arrayDiff];
-
-                //fill temp array with null vales
-                for(int i = 0; i < arrayDiff; i++){
-                    tempNULL[i] = null;
-                }
-
                 String hasBountyString;
                 String hasRewardString;
                 if(tempBD.getHasBounty()){
@@ -216,6 +208,14 @@ public class BountyDataManager {
                 };
 
                 logger.info(tempData.toString());
+
+                int arrayDiff = new BountyDataImproved().getSaveData().length - tempData.length;
+                String[] tempNULL = new String[arrayDiff];
+
+                //fill temp array with null vales
+                for(int i = 0; i < arrayDiff; i++){
+                    tempNULL[i] = null;
+                }
 
                 bountyData.add(new BountyDataImproved(ArrayUtils.addAll(tempData, tempNULL)));
                 logger.info("Transfer End");

@@ -79,11 +79,11 @@ public class BountyDataImproved implements java.io.Serializable {
     }
 
     public List<UUID> getCreatedBounties(){
-        return createdBounties;
+        return this.createdBounties;
     }
 
     public UUID getBountier(){
-        return bountier;
+        return this.bountier;
     }
 
     public void setHasBounty(boolean hasBounty){
@@ -129,6 +129,7 @@ public class BountyDataImproved implements java.io.Serializable {
         String hasBountyString;
         String hasRewardString;
         String bountyListString = "";
+        String bountierString = "";
 
         if(hasBounty){
             hasBountyString = "true";
@@ -145,6 +146,12 @@ public class BountyDataImproved implements java.io.Serializable {
             bountyListString += (uuid.toString() + " ");
         }
 
+        if(this.bountier == null){
+            bountierString = "NA";
+        }else{
+            bountierString = bountier.toString();
+        }
+
         String[] data = {uuid.toString(),
                 hasBountyString,
                 hasRewardString,
@@ -153,7 +160,8 @@ public class BountyDataImproved implements java.io.Serializable {
                 GPid.toString(),
                 GPname,
                 playerName,
-                bountyListString};
+                bountyListString,
+                bountierString};
         return data;
     }
 
@@ -176,9 +184,19 @@ public class BountyDataImproved implements java.io.Serializable {
         this.playerName = data[7];
 
         String[] uuidList = data[8].split(" ");
-        createdBounties.clear();
+        this.createdBounties = new ArrayList<UUID>();
         for (String uuid: uuidList) {
-            createdBounties.add(UUID.fromString(uuid));
+            if(uuid.equalsIgnoreCase(" ") || uuid.equalsIgnoreCase("")){
+                continue;
+            }else{
+                this.createdBounties.add(UUID.fromString(uuid));
+            }
+        }
+
+        if(data[9].equalsIgnoreCase("NA")){
+            this.bountier = null;
+        }else{
+            this.bountier = UUID.fromString(data[9]);
         }
     }
 

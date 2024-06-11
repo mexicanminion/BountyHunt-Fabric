@@ -66,6 +66,7 @@ public class SetBountyGUI extends SimpleGui {
                     .setName(Text.literal("Back/Cancel").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                     .setCallback(((index, clickType, action) -> {
                         try {
+                            this.close();
                             IncreaseBountyGUI increaseBountyGUI = new IncreaseBountyGUI(player, false, contextServer);
                             increaseBountyGUI.open();
                         } catch (Exception e) {
@@ -280,9 +281,8 @@ public class SetBountyGUI extends SimpleGui {
      */
     @Override
     public void onClose() {
-        //TODO: When adjusting amount and pressing escape, you get back the original amount of currency when you should not
         super.onClose();
-        if(!isPlayerDone && !isEditing){
+        if(!isPlayerDone){
             for(int i = 0; i < amount; i++){
                 if(player.getInventory().getEmptySlot() == -1){
                     player.dropItem(new ItemStack(CommonMethods.itemIngot, 1), true);
@@ -291,7 +291,6 @@ public class SetBountyGUI extends SimpleGui {
                 }
             }
         }
-
     }
 
     public void updateSelectAmountButton(Item mainItem, String ingotName, String blockName){

@@ -141,8 +141,7 @@ public class BountyBoardGUI extends SimpleGui {
 
     public Text getLoreValueAmount(int amount){
         MutableText amountText = Text.literal("");
-
-        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true)))
+        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                 .append(Text.literal(amount + " " + CommonMethods.itemIngotName +"(s)").formatted(Formatting.YELLOW));
 
         return amountText;
@@ -154,7 +153,7 @@ public class BountyBoardGUI extends SimpleGui {
 
         for (String player : onlinePlayers) {
             if(player.equals(name)){
-                onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true)))
+                onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
                         .append(Text.literal("Yes").formatted(Formatting.GREEN));
                 return onlineText;
             }

@@ -2,7 +2,6 @@ package net.mexicanminion.bountyhunt.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import net.mexicanminion.bountyhunt.gui.BountyBoardGUI;
 import net.mexicanminion.bountyhunt.gui.IncreaseBountyGUI;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
 import net.mexicanminion.bountyhunt.util.BountyDataImproved;
