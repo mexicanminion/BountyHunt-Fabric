@@ -31,7 +31,7 @@ public class AdjustBountyCommand {
 
         // Checks if the player has an entry in the master list, if not it adds one
         if(BountyDataManager.getBountyData(sender.getUuid()) == null) {
-            BountyDataManager.setBountyData(new BountyDataImproved(sender.getUuid(), false, false, 0, 0, sender.getGameProfile(), sender.getName().toString(), null));
+            BountyDataManager.setBountyData(new BountyDataImproved(sender.getUuid(), false, false, 0, 0, sender.getGameProfile(), sender.getName().getString(), null));
         }
 
         try {

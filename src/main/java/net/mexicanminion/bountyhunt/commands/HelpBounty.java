@@ -24,6 +24,7 @@ public class HelpBounty {
         final ServerPlayerEntity sender = source.getPlayer();
 
         source.sendFeedback(()-> Text.literal("/setbounty {player}: Set a bounty on a online player"), false);
+        source.sendFeedback(()-> Text.literal("/adjustbounty: See the bounties you can increase"), false);
         source.sendFeedback(()-> Text.literal("/claimbounty: Claim your bounty"), false);
         source.sendFeedback(()-> Text.literal("/bountyboard: See all bounties"), false);
         source.sendFeedback(()-> Text.literal("/helpbounty: See list of Bounty Hunt commands"), false);
