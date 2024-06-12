@@ -71,10 +71,10 @@ public abstract class OnDeathMixin {
             }else{
                 BountyManager.removeFromBountyList(BountyDataManager.getBountyData(fallen.getUuid()).getBountier(), fallen.getUuid());
             }
-            RewardManager.setReward(attacker.getUuid(), true, rewardAmount, attacker.getGameProfile(), attacker.getEntityName());
-            BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getEntityName(), null);//TODO marker just incase this breaks something, you know
+            RewardManager.setReward(attacker.getUuid(), true, rewardAmount, attacker.getGameProfile(), attacker.getName().toString());
+            BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getName().toString(), null);//TODO marker just incase this breaks something, you know
 
-            target.getAttacker().sendMessage(Text.of("You have claimed " + target.getEntityName() + "'s bounty!"));
+            target.getAttacker().sendMessage(Text.of("You have claimed " + target.getName().toString() + "'s bounty!"));
             //TODO: add a message to say the next command
             target.sendMessage(Text.of("You have been cleared of your burden"), false);
             if(RewardManager.getReward(attacker.getUuid()) >= CommonMethods.announceAmount){
@@ -82,7 +82,7 @@ public abstract class OnDeathMixin {
                     if ((players == target) || (players == target.getAttacker())) {
                         continue;
                     }
-                    players.sendMessage(Text.of("The bounty on " + target.getEntityName() + " has been claimed!"), false);
+                    players.sendMessage(Text.of("The bounty on " + target.getName().toString() + " has been claimed!"), false);
                 }
             }
         }

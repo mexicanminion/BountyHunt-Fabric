@@ -114,30 +114,30 @@ public class SetBountyGUI extends SimpleGui {
             }else{
                 diffValue = amount;
             }
-            BountyManager.setBounty(target.getUuid(), true, totalValue, target.getGameProfile(), target.getEntityName(), player.getUuid());
+            BountyManager.setBounty(target.getUuid(), true, totalValue, target.getGameProfile(), target.getName().toString(), player.getUuid());
             //send the title and subtitle to everyone on the server
             if(amount >= CommonMethods.announceAmount){
                 for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
-                    players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty increased on " + target.getEntityName()).formatted(Formatting.RED)));
+                    players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty increased on " + target.getName().toString()).formatted(Formatting.RED)));
                     players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the added amount of " + diffValue +  " " + CommonMethods.itemIngotName
                             + "(s), Total value of " + totalValue +  " " + CommonMethods.itemIngotName + "(s)").formatted(Formatting.YELLOW)));
                 }
             }else {
-                player.sendMessage(Text.of("Bounty adjusted on " + target.getEntityName() + " for the added amount of " + amount + " " + CommonMethods.itemIngotName + "(s), Total value of " + totalValue +  " " + CommonMethods.itemIngotName + "(s)" ), false);
+                player.sendMessage(Text.of("Bounty adjusted on " + target.getName().toString() + " for the added amount of " + amount + " " + CommonMethods.itemIngotName + "(s), Total value of " + totalValue +  " " + CommonMethods.itemIngotName + "(s)" ), false);
                 target.sendMessage(Text.of("The bounty on you has increased by " + amount + " " + CommonMethods.itemIngotName + "(s) totaling " + totalValue +  " " + CommonMethods.itemIngotName + "(s)"), false);
             }
         }else{
-            BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getEntityName(), player.getUuid());
+            BountyManager.setBounty(target.getUuid(), true, amount, target.getGameProfile(), target.getName().toString(), player.getUuid());
             BountyManager.addToBountyList(player.getUuid(), target.getUuid());
 
             //send the title and subtitle to everyone on the server
             if(amount >= CommonMethods.announceAmount){
                 for (ServerPlayerEntity players : contextServer.getServer().getPlayerManager().getPlayerList()) {
-                    players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getEntityName()).formatted(Formatting.RED)));
+                    players.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("Bounty set on " + target.getName().toString()).formatted(Formatting.RED)));
                     players.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("For the amount of " + amount +  " " + CommonMethods.itemIngotName + "(s)").formatted(Formatting.YELLOW)));
                 }
             }else {
-                player.sendMessage(Text.of("Bounty set on " + target.getEntityName() + " for the amount of " + amount + " " + CommonMethods.itemIngotName + "(s)"), false);
+                player.sendMessage(Text.of("Bounty set on " + target.getName().toString() + " for the amount of " + amount + " " + CommonMethods.itemIngotName + "(s)"), false);
                 target.sendMessage(Text.of("A bounty has been set on you for the amount of " + amount + " diamond(s)"), false);
             }
         }

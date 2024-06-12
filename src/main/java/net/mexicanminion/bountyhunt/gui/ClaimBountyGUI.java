@@ -227,7 +227,7 @@ public class ClaimBountyGUI extends SimpleGui {
             }
         }
         //set the reward to 0
-        RewardManager.setReward(player.getUuid(), false, 0, player.getGameProfile(), player.getEntityName());//TODO marker again just incase it breaks, you know
+        RewardManager.setReward(player.getUuid(), false, 0, player.getGameProfile(), player.getName().toString());//TODO marker again just incase it breaks, you know
         this.close();
     }
 }
