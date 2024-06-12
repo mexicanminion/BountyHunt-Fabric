@@ -17,6 +17,7 @@ A server side mod that allows you to add a bounty system to your server using in
 - All players online will see a bounty when it gets set if the amount is high enough
 - A Bounty board to see who all has bounties
 - An announcement when a bounty is set to the whole server
+- Increase bounties after setting them
 
 ### **Commands**
 
@@ -26,6 +27,7 @@ A server side mod that allows you to add a bounty system to your server using in
 | /claimbounty                                                             | Allows the player to claim a bounty with diamonds via a GUI                                                                                         | Everyone         |
 | /bountyboard                                                             | Allows the player to see all the bounties that are currently active                                                                                 | Everyone         |
 | /helpbounty                                                              | Shows all the commands for Bounty Hunt                                                                                                              | Everyone         |
+| /adjustbounty                                                            | Allows the player to change a previously set bounty via a GUI                                                                                       | Everyone         |
 | /bountyItemType <diamonds/iron/gold/<br/>emerald/lapis/copper/netherite> | Set the currency to a preset mineral                                                                                                                | Level 3          |
 | /bountyItemType custom <ingot\>                                          | Set the currency to a custom item with no block variant allowed                                                                                     | Level 3          |
 | /bountyItemType custom <ingot\> <block\> <ingotToBlockAmount\>           | Set the currency to a custom item with a block variant with the amount of the single item to the block variant                                      | Level 3          |
@@ -43,7 +45,8 @@ A server side mod that allows you to add a bounty system to your server using in
 - The bounty system uses diamonds as the currency. This can be changed to any mineral using the /bountyItemType command
 - The bounty system uses a GUI to set and claim bounties
 - An announcement will be made to the whole server when a bounty is set if the amount of diamonds is greater than the value set in the /bountyAnnouncement command (Default is 576 ingots, equivalent to 9 stack of the ingot type or 1 stack of the block type)
-- The bounty board will show all the bounties that are currently active
+- The Bounty Board will show all the bounties that are currently active
+- The Adjust Bounty GUI allows you to increase the price of a previously set bounty when the target player is online
 
 ### **Config file**
 This is the default config file for Bounty Hunt
