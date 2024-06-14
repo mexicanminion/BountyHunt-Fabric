@@ -44,7 +44,7 @@ dependencies {
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
-	modImplementation include("eu.pb4:sgui:1.4.2+1.20.4")
+	modImplementation include("eu.pb4:sgui:1.6.0+1.21")
 
 	implementation include('com.electronwill.night-config:core:3.6.0')
 	implementation include('com.electronwill.night-config:json:3.6.0')

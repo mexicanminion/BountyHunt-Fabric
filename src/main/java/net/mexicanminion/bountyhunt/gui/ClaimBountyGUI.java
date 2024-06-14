@@ -12,6 +12,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import static net.mexicanminion.bountyhunt.BountyHuntMod.config;
 
@@ -39,16 +40,15 @@ public class ClaimBountyGUI extends SimpleGui {
         }
 
         this.setSlot(3, new GuiElementBuilder(Items.LIME_CONCRETE)
-                .setName(Text.literal("Reward: " + dAmount + " " + CommonMethods.itemIngotName + "(s)!").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .addLoreLine(Text.literal("Make sure you have enough inventory space!").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                .hideFlags()
+                .setName(Text.literal("Reward: " + dAmount + " " + CommonMethods.itemIngotName + "(s)!").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
+                .addLoreLine(Text.literal("Make sure you have enough inventory space!").setStyle(Style.EMPTY.withItalic(true).withBold(false).withColor(Formatting.WHITE)))
                 .setCallback(((index, clickType, action) -> {addDiamondsToPlayer();})));
 
         this.setSlot(5, new GuiElementBuilder()
                 .setItem(Items.BARRIER)
-                .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .addLoreLine(Text.literal("Coming back when you have more Inventory space?").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                .addLoreLine(Text.literal("Your reward will still be here!").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
+                .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
+                .addLoreLine(Text.literal("Coming back when you have more Inventory space?").setStyle(Style.EMPTY.withItalic(true).withBold(false).withColor(Formatting.WHITE)))
+                .addLoreLine(Text.literal("Your reward will still be here!").setStyle(Style.EMPTY.withItalic(true).withBold(false).withColor(Formatting.WHITE)))
                 .setCallback(((index, clickType, action) -> this.close())));
 
         addDiamondsToGUI();

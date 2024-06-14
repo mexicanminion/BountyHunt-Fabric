@@ -56,7 +56,8 @@ public abstract class OnDeathMixin {
         if(target.getAttacker() == null){
             return;
         }
-        if(damageSource.isIndirect()) {
+
+        if(!damageSource.isDirect()) {
             return;
         }
         //check if the player who died had a bounty
