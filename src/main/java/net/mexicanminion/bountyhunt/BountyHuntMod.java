@@ -79,7 +79,6 @@ public class BountyHuntMod implements ModInitializer {
 
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			if((new File(bountyPath)).exists()){
 				LOGGER.info("Created `bountyhunt` directory.");
 			}else{
