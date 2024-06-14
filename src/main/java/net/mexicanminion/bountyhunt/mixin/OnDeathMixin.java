@@ -5,7 +5,9 @@ import net.mexicanminion.bountyhunt.managers.BountyManager;
 import net.mexicanminion.bountyhunt.managers.RewardManager;
 import net.mexicanminion.bountyhunt.util.CommonMethods;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -54,6 +56,12 @@ public abstract class OnDeathMixin {
             return;
         }
         if(target.getAttacker() == null){
+            return;
+        }
+
+        LivingEntity temp = target.getAttacker();
+
+        if(!(temp instanceof ServerPlayerEntity)){
             return;
         }
 
