@@ -60,7 +60,7 @@ public abstract class OnDeathMixin {
         }
 
         LivingEntity temp = target.getAttacker();
-
+      
         if(!(temp instanceof ServerPlayerEntity)){
             return;
         }
