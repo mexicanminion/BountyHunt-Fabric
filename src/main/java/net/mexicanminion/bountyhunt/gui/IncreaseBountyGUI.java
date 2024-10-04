@@ -45,13 +45,12 @@ public class IncreaseBountyGUI extends SimpleGui {
         this.reOpen = true;
 
         for(int i = 0; i < 54; i++){
-            this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()).hideFlags());
+            this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
         }
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.PLAYER_HEAD)
-                .setName(Text.literal("Back Page").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .hideFlags()
+                .setName(Text.literal("Back Page").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                 .setSkullOwner(PlayerHeads.LEFT)
                 .setCallback(((index, clickType, action) -> prevPage())));
 
@@ -60,8 +59,7 @@ public class IncreaseBountyGUI extends SimpleGui {
 
         this.setSlot(50, new GuiElementBuilder()
                 .setItem(Items.PLAYER_HEAD)
-                .setName(Text.literal("Next Page").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .hideFlags()
+                .setName(Text.literal("Next Page").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                 .setSkullOwner(PlayerHeads.RIGHT)
                 .setCallback(((index, clickType, action) -> nextPage())));
 
@@ -101,8 +99,7 @@ public class IncreaseBountyGUI extends SimpleGui {
     private void setPageButton(){
         this.setSlot(49, new GuiElementBuilder()
                 .setItem(Items.PLAYER_HEAD)
-                .setName(Text.literal("Page: " + currPage + " of " + maxPage).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                .hideFlags()
+                .setName(Text.literal("Page: " + currPage + " of " + maxPage).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                 .setSkullOwner(PlayerHeads.INFO));
     }
 
@@ -112,8 +109,7 @@ public class IncreaseBountyGUI extends SimpleGui {
         //check if bountyList empty
         if(setBountyList.isEmpty()){
             this.setSlot(22, new GuiElementBuilder(Items.PLAYER_HEAD)
-                    .setName(Text.literal("No Bounties Available!").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                    .hideFlags());
+                    .setName(Text.literal("No Bounties Available!").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE))));
             return;
         }
 
@@ -129,20 +125,18 @@ public class IncreaseBountyGUI extends SimpleGui {
             }else {
                 if(getOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName())){
                     this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
-                            .hideFlags()
                             .setCallback(((index, clickType, action) -> openSetBountyGUI(setBountyList, index)))
-                            .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                            .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                             .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
                             .addLoreLine(getLoreOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
                             .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
                 }else{
                     this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
-                            .hideFlags()
-                            .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                            .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                             .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
                             .addLoreLine(getLoreOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
-                            .addLoreLine(Text.literal("You can't change the bounty").setStyle(Style.EMPTY.withItalic(true).withBold(true)).formatted(Formatting.RED))
-                            .addLoreLine(Text.literal("when the player is offline!").setStyle(Style.EMPTY.withItalic(true).withBold(true)).formatted(Formatting.RED))
+                            .addLoreLine(Text.literal("You can't change the bounty").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.RED)))
+                            .addLoreLine(Text.literal("when the player is offline!").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.RED)))
                             .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
                 }
 
@@ -155,7 +149,7 @@ public class IncreaseBountyGUI extends SimpleGui {
     public Text getLoreValueAmount(int amount){
         MutableText amountText = Text.literal("");
 
-        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                 .append(Text.literal(amount + " " + CommonMethods.itemIngotName +"(s)").formatted(Formatting.YELLOW));
 
         return amountText;
@@ -167,13 +161,13 @@ public class IncreaseBountyGUI extends SimpleGui {
 
         for (String player : onlinePlayers) {
             if(player.equals(name)){
-                onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                         .append(Text.literal("Yes").formatted(Formatting.GREEN));
                 return onlineText;
             }
         }
 
-        onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+        onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                 .append(Text.literal("No").formatted(Formatting.RED));
 
         return onlineText;

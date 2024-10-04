@@ -7,6 +7,7 @@ import net.mexicanminion.bountyhunt.util.CommonMethods;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -59,11 +60,12 @@ public abstract class OnDeathMixin {
         }
 
         LivingEntity temp = target.getAttacker();
+      
         if(!(temp instanceof ServerPlayerEntity)){
             return;
         }
 
-        if(damageSource.isIndirect()) {
+        if(!damageSource.isDirect()) {
             return;
         }
         //check if the player who died had a bounty

@@ -63,7 +63,7 @@ public class SetBountyGUI extends SimpleGui {
         if(isEditing){
             this.setSlot(50, new GuiElementBuilder()
                     .setItem(Items.BARRIER)
-                    .setName(Text.literal("Back/Cancel").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .setName(Text.literal("Back/Cancel").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                     .setCallback(((index, clickType, action) -> {
                         try {
                             this.close();
@@ -77,7 +77,7 @@ public class SetBountyGUI extends SimpleGui {
         }else {
             this.setSlot(50, new GuiElementBuilder()
                     .setItem(Items.BARRIER)
-                    .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                    .setName(Text.literal("Exit").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                     .setCallback(((index, clickType, action) -> this.close())));
 
         }
@@ -231,7 +231,7 @@ public class SetBountyGUI extends SimpleGui {
 
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.LIME_CONCRETE)
-                .setName(Text.literal("Confirm with " + amount + " "+CommonMethods.itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
+                .setName(Text.literal("Confirm with " + amount + " "+CommonMethods.itemIngotName+"(s)?").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                 .setCallback(((index, clickType, action) -> confirmDiamondsUpdate())));
     }
 
@@ -296,15 +296,15 @@ public class SetBountyGUI extends SimpleGui {
     public void updateSelectAmountButton(Item mainItem, String ingotName, String blockName){
         if(CommonMethods.onlyIngot){
             this.setSlot(13, new GuiElementBuilder(mainItem)
-                    .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                    .setCallback(((index, clickType, action) -> {purchaseType(false);})).hideFlags());
+                    .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
+                    .setCallback(((index, clickType, action) -> {purchaseType(false);})));
         }
         else {
             this.setSlot(13, new GuiElementBuilder(mainItem)
-                    .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true)))
-                    .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                    .addLoreLine(Text.literal(ingotName + " and " + blockName).setStyle(Style.EMPTY.withItalic(true).withBold(false)))
-                    .setCallback(((index, clickType, action) -> {purchaseType(true);})).hideFlags());
+                    .setName(Text.literal("Select Amount").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
+                    .addLoreLine(Text.literal("Click to switch between ").setStyle(Style.EMPTY.withItalic(true).withBold(false).withColor(Formatting.WHITE)))
+                    .addLoreLine(Text.literal(ingotName + " and " + blockName).setStyle(Style.EMPTY.withItalic(true).withBold(false).withColor(Formatting.WHITE)))
+                    .setCallback(((index, clickType, action) -> {purchaseType(true);})));
 
         }
 
