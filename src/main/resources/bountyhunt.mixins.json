@@ -2,7 +2,7 @@
 	"required": true,
 	"package": "net.mexicanminion.bountyhunt.mixin",
 	"compatibilityLevel": "JAVA_21",
-	"mixins": [],
+	"mixins": ["OnDeathMixin"],
 	"server": ["OnDeathMixin"],
 	"injectors": {
 		"defaultRequire": 1

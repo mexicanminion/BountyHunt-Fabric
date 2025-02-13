@@ -83,7 +83,8 @@ public abstract class OnDeathMixin {
             RewardManager.setReward(attacker.getUuid(), true, rewardAmount, attacker.getGameProfile(), attacker.getName().getString());
             BountyManager.setBounty(fallen.getUuid(), false, 0, fallen.getGameProfile(), fallen.getName().getString(), null);//TODO marker just incase this breaks something, you know
 
-            target.getAttacker().sendMessage(Text.of("You have claimed " + target.getName().getString() + "'s bounty!"));
+            ((ServerPlayerEntity) target.getAttacker()).sendMessage(Text.of("You have claimed " + target.getName().getString() + "'s bounty!"));
+            //target.getAttacker().sendMessage(Text.of("You have claimed " + target.getName().getString() + "'s bounty!"));
             //TODO: add a message to say the next command
             target.sendMessage(Text.of("You have been cleared of your burden"), false);
             if(RewardManager.getReward(attacker.getUuid()) >= CommonMethods.announceAmount){
