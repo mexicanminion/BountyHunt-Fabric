@@ -3,8 +3,7 @@ package net.mexicanminion.bountyhunt.gui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.mexicanminion.bountyhunt.managers.BountyDataManager;
-import net.mexicanminion.bountyhunt.util.BountyDataImproved;
-import net.mexicanminion.bountyhunt.util.CommonMethods;
+import net.mexicanminion.bountyhunt.util.*;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.MinecraftServer;
@@ -20,7 +19,7 @@ import java.util.List;
 import static net.mexicanminion.bountyhunt.util.LoreLines.getLoreOnlineState;
 import static net.mexicanminion.bountyhunt.util.LoreLines.getLoreValueAmount;
 
-public class BountyBoardGUI extends SimpleGui {
+public class ShopGUI extends SimpleGui {
 
     public MinecraftServer server;
 
@@ -30,6 +29,8 @@ public class BountyBoardGUI extends SimpleGui {
     int maxHeadPerPage = 28;
     int currFirstHead = 0;
     int nextFirstHead = maxHeadPerPage;
+
+
     /**
      * Constructs a new simple container gui for the supplied player.
      *
@@ -37,12 +38,12 @@ public class BountyBoardGUI extends SimpleGui {
      * @param manipulatePlayerSlots if <code>true</code> the players inventory
      *                              will be treated as slots of this gui
      */
-    public BountyBoardGUI(ServerPlayerEntity player, boolean manipulatePlayerSlots, ServerCommandSource contextServer) {
+    public ShopGUI(ServerPlayerEntity player, boolean manipulatePlayerSlots, ServerCommandSource contextServer) {
         super(ScreenHandlerType.GENERIC_9X6, player, manipulatePlayerSlots);
 
         server = contextServer.getServer();
         this.setLockPlayerInventory(false);
-        this.setTitle(Text.of("Bounty Board"));
+        this.setTitle(Text.of("Choose player you wish to hunt"));
         this.reOpen = true;
 
         for(int i = 0; i < 54; i++){
@@ -106,8 +107,6 @@ public class BountyBoardGUI extends SimpleGui {
                     .setName(Text.literal("No Bounties Available!").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE))));
             return;
         }
-        //server.getPlayerManager().getPlayer(bountyList.get(0).getUUID()).getEntityName(); GRABS FROM ONLINE PLAYERS ONLY, NOT FROM OFFLINE
-        //server.getPlayerManager().getPlayer(bountyList.get(0).getUUID()).getGameProfile(); GRABS FROM ONLINE PLAYERS ONLY, NOT FROM OFFLINE
 
         currFirstHead = currHead;
         for (int i = 10; i <= 44; i++) {
@@ -123,6 +122,7 @@ public class BountyBoardGUI extends SimpleGui {
                         .setName(Text.literal(bountyList.get(currHead).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                         .addLoreLine(getLoreValueAmount(bountyList.get(currHead).getBountyValue()))
                         .addLoreLine(getLoreOnlineState(server, bountyList.get(currHead).getPlayerName()))
+                        .addLoreLine(getLoreShopMessage(bountyList.get(currHead).getPlayerName()))
                         .setSkullOwner(bountyList.get(currHead).getGameProfile(), server));
             }
             currHead++;
@@ -133,7 +133,15 @@ public class BountyBoardGUI extends SimpleGui {
     private void setPageButton(){
         this.setSlot(49, new GuiElementBuilder()
                 .setItem(Items.PLAYER_HEAD)
-                .setName(Text.literal("Page: " + currPage + " of " + maxPage).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
+                .setName(Text.literal("Page: " + currPage + " of " + maxPage)
+                        .setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                 .setSkullOwner(PlayerHeads.INFO));
+    }
+
+    public static Text getLoreShopMessage(String name){
+        MutableText amountText = Text.literal("");
+        amountText.append(Text.literal("Open Hunt Shop")
+                .setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.GOLD)));
+        return amountText;
     }
 }

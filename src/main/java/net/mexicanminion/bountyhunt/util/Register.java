@@ -16,5 +16,6 @@ public class Register {
         CommandRegistrationCallback.EVENT.register(AdjustBountyCommand::register);
         CommandRegistrationCallback.EVENT.register(SetAnnouncementCommand::register);
         CommandRegistrationCallback.EVENT.register(HelpBounty::register);
+        CommandRegistrationCallback.EVENT.register(ShopCommand::register);
     }
 }

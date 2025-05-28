@@ -17,6 +17,9 @@ import net.minecraft.util.Formatting;
 import java.util.List;
 import java.util.UUID;
 
+import static net.mexicanminion.bountyhunt.util.LoreLines.getLoreOnlineState;
+import static net.mexicanminion.bountyhunt.util.LoreLines.getLoreValueAmount;
+
 public class IncreaseBountyGUI extends SimpleGui {
 
     public MinecraftServer server;
@@ -128,13 +131,13 @@ public class IncreaseBountyGUI extends SimpleGui {
                             .setCallback(((index, clickType, action) -> openSetBountyGUI(setBountyList, index)))
                             .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                             .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
-                            .addLoreLine(getLoreOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
+                            .addLoreLine(getLoreOnlineState(server, BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
                             .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
                 }else{
                     this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
                             .setName(Text.literal(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                             .addLoreLine(getLoreValueAmount(BountyManager.getBountyData(setBountyList.get(currHead)).getBountyValue()))
-                            .addLoreLine(getLoreOnlineState(BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
+                            .addLoreLine(getLoreOnlineState(server, BountyManager.getBountyData(setBountyList.get(currHead)).getPlayerName()))
                             .addLoreLine(Text.literal("You can't change the bounty").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.RED)))
                             .addLoreLine(Text.literal("when the player is offline!").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.RED)))
                             .setSkullOwner(BountyManager.getBountyData(setBountyList.get(currHead)).getGameProfile(), server));
@@ -144,33 +147,6 @@ public class IncreaseBountyGUI extends SimpleGui {
             currHead++;
         }
         nextFirstHead = currHead+1;
-    }
-
-    public Text getLoreValueAmount(int amount){
-        MutableText amountText = Text.literal("");
-
-        amountText.append(Text.literal("Amount: ").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
-                .append(Text.literal(amount + " " + CommonMethods.itemIngotName +"(s)").formatted(Formatting.YELLOW));
-
-        return amountText;
-    }
-
-    public Text getLoreOnlineState(String name){
-        String[] onlinePlayers = server.getPlayerNames();
-        MutableText onlineText = Text.literal("");
-
-        for (String player : onlinePlayers) {
-            if(player.equals(name)){
-                onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
-                        .append(Text.literal("Yes").formatted(Formatting.GREEN));
-                return onlineText;
-            }
-        }
-
-        onlineText.append(Text.literal("Online?: ").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
-                .append(Text.literal("No").formatted(Formatting.RED));
-
-        return onlineText;
     }
 
     public boolean getOnlineState(String name){

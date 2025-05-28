@@ -8,6 +8,7 @@ import net.mexicanminion.bountyhunt.managers.BountyDataManager;
 import net.mexicanminion.bountyhunt.util.Register;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,6 +92,8 @@ public class BountyHuntMod implements ModInitializer {
 		LOGGER.info("Registered commands.");
 
 		LOGGER.info("BountyHunt has been initialized!");
+
+		ServerLifecycleEvents.BEFORE_SAVE.register(this::onServerSave);
 	}
 
 	private void loadConfig() {
@@ -159,6 +162,19 @@ public class BountyHuntMod implements ModInitializer {
 		}
 
 		LOGGER.info("BountyHunt has been shut down!");
+	}
+
+	private void onServerSave(MinecraftServer server, boolean silent, boolean flush) {
+
+		LOGGER.info("Saving Information");
+		BountyDataManager bountyDataManager = new BountyDataManager();
+
+		try {
+			bountyDataManager.saveBountyDataFile(LOGGER);
+			writeJSON();
+		} catch (IOException e) {
+			LOGGER.info("Error saving bounty data.");
+		}
 	}
 
 }
