@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.9-SNAPSHOT'
+	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -40,7 +40,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation include("eu.pb4:sgui:1.8.2+1.21.4")
+	modImplementation include("eu.pb4:sgui:1.9.0+1.21.5")
 
 	implementation include('com.electronwill.night-config:core:3.6.6')
 	implementation include('com.electronwill.night-config:json:3.6.6')
