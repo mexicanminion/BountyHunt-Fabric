@@ -14,6 +14,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static net.mexicanminion.bountyhunt.util.LoreLines.getLoreOnlineState;
@@ -30,7 +32,6 @@ public class ShopGUI extends SimpleGui {
     int currFirstHead = 0;
     int nextFirstHead = maxHeadPerPage;
 
-
     /**
      * Constructs a new simple container gui for the supplied player.
      *
@@ -43,13 +44,17 @@ public class ShopGUI extends SimpleGui {
 
         server = contextServer.getServer();
         this.setLockPlayerInventory(false);
-        this.setTitle(Text.of("Choose player you wish to hunt"));
         this.reOpen = true;
 
         for(int i = 0; i < 54; i++){
             this.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.empty()));
         }
 
+        displayHeads();
+    }
+
+    private void displayHeads(){
+        this.setTitle(Text.of("Choose player you wish to hunt"));
         this.setSlot(48, new GuiElementBuilder()
                 .setItem(Items.PLAYER_HEAD)
                 .setName(Text.literal("Back Page").setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
@@ -66,6 +71,11 @@ public class ShopGUI extends SimpleGui {
                 .setCallback(((index, clickType, action) -> nextPage())));
 
         spawnHeads();
+    }
+
+    private void displayItems(){
+        this.setTitle(Text.of("Choose item to buy"));
+
     }
 
     public void setMaxPage(){
@@ -100,6 +110,7 @@ public class ShopGUI extends SimpleGui {
 
     public void spawnHeads(){
         List<BountyDataImproved> bountyList = BountyDataManager.getBountyData();
+        List<String> onlinePlayers = Arrays.asList(server.getPlayerNames());
 
         //check if bountyList empty
         if(bountyList.isEmpty()){
@@ -109,6 +120,7 @@ public class ShopGUI extends SimpleGui {
         }
 
         currFirstHead = currHead;
+
         for (int i = 10; i <= 44; i++) {
             if(i == 17 || i == 26 || i == 35 || i == 44){
                 i += 1;
@@ -117,8 +129,16 @@ public class ShopGUI extends SimpleGui {
             if(currHead > bountyList.size()-1){
                 //empty slot
                 this.setSlot(i, new GuiElementBuilder(Items.AIR));
-            }else {
+            }else if(onlinePlayers.contains(bountyList.get(currHead).getPlayerName())){
                 this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
+                        .setName(Text.literal(bountyList.get(currHead).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
+                        .addLoreLine(getLoreValueAmount(bountyList.get(currHead).getBountyValue()))
+                        .addLoreLine(getLoreOnlineState(server, bountyList.get(currHead).getPlayerName()))
+                        .addLoreLine(getLoreShopMessage(bountyList.get(currHead).getPlayerName()))
+                        .setSkullOwner(bountyList.get(currHead).getGameProfile(), server));
+            }else{
+                this.setSlot(i, new GuiElementBuilder(Items.PLAYER_HEAD)
+                        .setCallback((index, clickType, action) -> displayItems())
                         .setName(Text.literal(bountyList.get(currHead).getPlayerName()).setStyle(Style.EMPTY.withItalic(true).withBold(true).withColor(Formatting.WHITE)))
                         .addLoreLine(getLoreValueAmount(bountyList.get(currHead).getBountyValue()))
                         .addLoreLine(getLoreOnlineState(server, bountyList.get(currHead).getPlayerName()))
